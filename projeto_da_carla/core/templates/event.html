@@ -1,0 +1,200 @@
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+</head>
+
+<body>
+
+    <main style="min-height: 100vh;">
+        <div class="row">
+            <div class="col s12 m12 l6 xl6 show-on-medium-and-down hide-on-large-only" style="min-height: 300px; 
+                {% if event.background %}
+                    background: url('{{event.background}}');
+                    background-repeat: no-repeat; 
+                    background-size: cover;
+                {% else %} 
+                    background: url('https://images.pexels.com/photos/1650627/pexels-photo-1650627.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
+                    background-repeat: no-repeat; 
+                    background-size: cover;
+                {% endif %}">
+
+                <h3>{{ event.title}}</h3>
+                <blockquote class="flow-text">{{event.description}}</blockquote>
+                <p>Irá expirar em: {{event.expiration_date}}</p>
+                {% if is_owner %}
+                <div class="container center-align">
+                    <p class="flow-text">Somente você pode ver os botões abaixo</p>
+                    <a href="#modal-info" class="modal-trigger btn deep-purple" style="margin-bottom: 10px;">Editar
+                        informações</a>
+                    <a href="#modal-confirm" class="modal-trigger btn deep-purple"
+                        style="margin-bottom: 10px;">Visualizar respostas</a>
+                </div>
+                {% endif %}
+
+            </div>
+            <div class="col s12 m12 l6 xl6 hide-on-med-and-down" style="height: 100%; 
+                {% if event.background %}
+                    background: url('{{event.background}}');
+                    background-repeat: no-repeat; 
+                    background-size: cover;
+                {% else %} 
+                    background: url('https://images.pexels.com/photos/1650627/pexels-photo-1650627.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
+                    background-repeat: no-repeat; 
+                    background-size: cover;
+                {% endif %}">
+
+                <h3>{{event.title}}</h3>
+                <blockquote class="flow-text">{{event.description}}</blockquote>
+                <p>Irá expirar em: {{event.expiration_date}}</p>
+                {% if is_owner %}
+                <div class="container center-align">
+                    <p class="flow-text">Somente você pode ver os botões abaixo</p>
+                    <a href="#modal-info" class="modal-trigger btn deep-purple" style="margin-bottom: 10px;">Editar
+                        informações</a>
+                    <a href="#modal-confirm" class="modal-trigger btn deep-purple"
+                        style="margin-bottom: 10px;">Visualizar respostas</a>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col s12 m12 l6 xl6">
+                <div class="container center-align">
+                    <h5>Escolha uma das opções abaixo</h5>
+                    <p>Somente o criador do formulário terá acesso às respostas</p>
+                </div>
+                <div class="container center-align" style="margin-top: 50px;">
+                    <div class="input-field">
+                        <input placeholder="Funalo de Tal" id="guest-name" name="guest-name" type="text"
+                            class="validate">
+                        <label for="username">Nome completo</label>
+                    </div>
+                    <button class="btn-large light-green" id="btn-confirm" style="width: 100%; margin: 15px 0;">
+                        {% if event.confirm_text %}
+                        {{event.confirm_text}}
+                        {% else %}
+                        Confirmar
+                        {% endif %}
+                    </button><br>
+                    <button class="btn-large red" id="btn-cancel" style="width: 100%;">
+                        {% if event.cancel_text %}
+                        {{event.cancel_text}}
+                        {% else %}
+                        Cancelar
+                        {% endif %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Structure -->
+    <div id="modal-info" class="modal">
+        <div class="modal-content">
+            <h6 class="mb-5">Editar informações</h6>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="input-field col s6">
+                    <input placeholder="Evento do dia do Nerd" id="title" name="title" type="text" class="validate"
+                        value="{{ event.title }}">
+                    <label for="username">Titulo</label>
+                </div>
+                <div class="input-field col s6">
+                    <input placeholder="Descreva o evento" id="description" name="description" type="text"
+                        class="validate" value="{{ event.description }}">
+                    <label for="username">Descrição</label>
+                </div>
+                <div class="input-field col s6">
+                    <input placeholder="http://url.com" id="background" name="background" type="url" class="validate"
+                        value="{% if event.background %}{{ event.background }}{% endif %}">
+                    <label for="username">Link da imagem de fundo</label>
+                </div>
+                <div class="input-field col s6">
+                    <input placeholder="Confirmar" id="confirm-text" name="confirm-text" type="text" class="validate"
+                        value="{% if event.confirm_text %}{{ event.confirm_text }}{% endif %}">
+                    <label for="username">Texto do botão de confirmação</label>
+                </div>
+                <div class="input-field col s6">
+                    <input placeholder="Cancelar" id="cancel-text" name="cancel-text" type="text" class="validate"
+                        value="{% if event.cancel_text %}{{ event.cancel_text }}{% endif %}">
+                    <label for="username">Texto do botão de cancelar</label>
+                </div>
+
+                <button class="btn deep-purple" type="submit" style="width: 100%;">Atualizar</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-confirm" class="modal">
+        <div class="modal-content">
+            <h6 class="mb-5">Respostas</h6>
+
+            <table class="striped highlight">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Resposta</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% if responses %}
+                    {% for response in responses %}
+                    <tr>
+                        <td>{{ response.guest_name }}</td>
+                        <td>
+                            {% if response.confirm %}
+                            {{ event.confirm_text }}
+                            {% else %}
+                            {{event.cancel_text}}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.modal').modal();
+        });
+    </script>
+    <script>
+        var guestName = document.getElementById('guest-name');
+        var btnConfirm = document.getElementById('btn-confirm');
+        var btnCancel = document.getElementById('btn-cancel');
+        var confirmUrlBase = 'http://localhost:8000/evento/{{event.id}}/confirm/';
+        var cancelUrlBase = 'http://localhost:8000/evento/{{event.id}}/cancel/';
+
+        function confirm() {
+            if (guestName.value.length < 5) {
+                alert('Informe o seu nome completo');
+            } else {
+                window.location.href = confirmUrlBase + guestName.value;
+            }
+        }
+
+        function cancel() {
+            if (guestName.value.length < 5) {
+                alert('Informe o seu nome completo');
+            } else {
+                window.location.href = cancelUrlBase + guestName.value;
+            }
+        }
+
+        btnConfirm.addEventListener('click', confirm);
+        btnCancel.addEventListener('click', cancel);
+    </script>
+</body>
+
+</html>

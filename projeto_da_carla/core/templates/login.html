@@ -1,0 +1,95 @@
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+</head>
+
+<body>
+
+    <main class="deep-purple darken-4"
+        style="width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center;">
+        <div class="container" style="width: 300px;">
+            <div class="card">
+                <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator"
+                        src="https://images.pexels.com/photos/5935240/pexels-photo-5935240.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
+                </div>
+                <div class="card-content">
+                    {% if messages %}
+                    <ul class="messages" style="margin: 0 20px 0;">
+                        {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }} red-text" {% endif %}>{{ message }}</li>
+                            {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="input-field col s6">
+                            <input placeholder="Seu login" id="username_login" name="username_login" type="text"
+                                class="validate">
+                            <label for="username">Username</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input placeholder="Senha" id="password_login" name="password_login" type="password"
+                                class="validate">
+                            <label for="password">Senha</label>
+                        </div>
+                        <button class="btn deep-purple" type="submit" style="width: 100%;">Entrar</button>
+                        <br><br>
+                        <div class="container center-align">
+                            <a class="modal-trigger" href="#modal1">Ainda não sou
+                                cadastrado <br>Clique aqui e
+                                cadastre-se</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h6 class="mb-5">Cadastrar usuário</h6>
+
+            <form action="/user/register" method="POST">
+                {% csrf_token %}
+                <div class="input-field col s6">
+                    <input placeholder="Fulano de Tal" id="name" name="name" type="text" class="validate"
+                        value="{{name}}">
+                    <label for="username">nome</label>
+                </div>
+                <div class="input-field col s6">
+                    <input placeholder="pedrinho_caramelo" id="username" name="username" type="text" class="validate"
+                        value="{{username}}">
+                    <label for="username">Username</label>
+                </div>
+                <div class="input-field col s6">
+                    <input placeholder="min 8 caracteres" id="password" name="password" type="password" class="validate"
+                        value="{{password}}">
+                    <label for="password">Senha</label>
+                </div>
+                <div class="input-field col s6">
+                    <input placeholder="Repetir senha" id="password-repeat" name="password-repeat" type="password"
+                        class="validate">
+                    <label for="password">Repetir senha</label>
+                </div>
+                <button class="btn deep-purple" type="submit" style="width: 100%;">Cadastrar-se</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.modal').modal();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+</head>
+
+<body>
+
+    <main>
+        <nav class="deep-purple">
+            <div class="nav-wrapper center-align">
+                <a href="#" class="brand-logo">Eventos</a>
+            </div>
+        </nav>
+
+        <div class="center-align" style="margin: 16px 0;">
+            <a class="modal-trigger btn deep-purple" href="#modal1">Adicionar evento</a>
+            <a class="btn red" href="/logout">Encerrar sessão</a>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                {% if events %}
+                {% for event in events %}
+                <a href="/evento/{{ event.id }}/{{ event.title }}">
+                    <div class="col s6">
+                        <div class="card deep-purple">
+                            <div class="card-content white-text">
+                                <span class="card-title">{{event.title}}</span>
+                                <p>{{ event.description }}</p>
+                                <p>Total de respostas: {{ event.responses.count }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+                {% else %}
+                <div class="center-align">
+                    <p class="flow-text">Nenhum evento cadastrado até o momento</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h6 class="mb-5">Cadastrar Evento</h6>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="input-field col s6">
+                    <input placeholder="Evento do dia do Nerd" id="title" name="title" type="text" class="validate"
+                        required>
+                    <label for="username">Titulo</label>
+                </div>
+                <div class="input-field col s6">
+                    <input placeholder="Descrição..." id="description" name="description" type="text" class="validate"
+                        required>
+                    <label for="description">Descrição</label>
+                </div>
+                <div class="input-field col s6">
+                    <input placeholder="25/05/2021" id="limit-date" name="limit-date" type="date" class="validate"
+                        required>
+                    <label for="limit-date">Data limite para confirmar presença</label>
+                </div>
+                <button class="btn deep-purple" type="submit" style="width: 100%;">Adicionar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.modal').modal();
+        });
+    </script>
+</body>
+
+</html>
