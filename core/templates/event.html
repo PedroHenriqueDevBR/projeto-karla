@@ -175,6 +175,9 @@
         var btnCancel = document.getElementById('btn-cancel');
         var confirmUrlBase = 'https://projeto-karla.herokuapp.com/evento/{{event.id}}/confirm/';
         var cancelUrlBase = 'https://projeto-karla.herokuapp.com/evento/{{event.id}}/cancel/';
+        // var confirmUrlBase = 'http://localhost:8000/evento/{{event.id}}/confirm/';
+        // var cancelUrlBase = 'http://localhost:8000/evento/{{event.id}}/cancel/';
+
 
         function confirm() {
             if (guestName.value.length < 5) {
