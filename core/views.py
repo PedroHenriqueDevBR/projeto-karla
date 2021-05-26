@@ -14,6 +14,13 @@ def login_page(request):
         username = request.POST.get('username_login')
         password = request.POST.get('password_login')
 
+        print('=' * 50)
+        print('Person login')
+        print('=' * 50)
+        print('Username: {}'.format(username))
+        print('Password: {}'.format(password))
+        print('=' * 50)
+
         user = authenticate(request, username=username, password=password)
 
         if user is None:
@@ -23,7 +30,7 @@ def login_page(request):
             login(request, user)
             return redirect('dashboard')
 
-    return render(request, 'login.html', {'username': username, 'password': password})
+    return render(request, 'login.html', {'name': '', 'username': '', 'password': '', 'username_login': username, 'password_login': password})
 
 
 def logout_page(request):
@@ -42,26 +49,29 @@ def user_register_page(request):
         password = request.POST.get('password')
         password_repeat = request.POST.get('password-repeat')
 
-        if password != password_repeat:
-            messages.error(request, 'Senhas diferentes ao se cadastrar, tente novamente')
-        elif len(password) < 8:
-            messages.error(request, 'A senha deve conter pelo menos 8 caracteres')
+        print('='*50)
+        print('Person register')
+        print('='*50)
+        print('Name: {}'.format(name))
+        print('Username: {}'.format(username))
+        print('Password: {}'.format(password))
+        print('='*50)
+
+        user_registered = User.objects.filter(username=username)
+        if len(user_registered) == 0:
+            user = User.objects.create_user(
+                username=username,
+                first_name=name,
+                password=password,
+                email='mail@mail.com'
+            )
+            person = Person()
+            person.name = name
+            person.user = user
+            person.save()
+            return redirect('login')
         else:
-            user_registered = User.objects.filter(username=username)
-            if len(user_registered) == 0:
-                user = User.objects.create_user(
-                    username=username,
-                    first_name=name,
-                    password=password,
-                    email='mail@mail.com'
-                )
-                person = Person()
-                person.name = name
-                person.user = user
-                person.save()
-                return redirect('login')
-            else:
-                messages.error(request, 'Username já cadastrado')
+            messages.error(request, 'Username já cadastrado')
 
     return render(request, 'login.html', {'name': name, 'username': username, 'password': password})
 
