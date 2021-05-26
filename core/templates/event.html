@@ -23,7 +23,7 @@
                 {% endif %}">
 
                 <h3>{{ event.title}}</h3>
-                <blockquote class="flow-text">{{event.description}}</blockquote>
+                <blockquote class="flow-text red-text">{{event.description}}</blockquote>
                 <p>Irá expirar em: {{event.expiration_date}}</p>
                 {% if is_owner %}
                 <div class="container center-align">
@@ -173,8 +173,8 @@
         var guestName = document.getElementById('guest-name');
         var btnConfirm = document.getElementById('btn-confirm');
         var btnCancel = document.getElementById('btn-cancel');
-        var confirmUrlBase = 'http://localhost:8000/evento/{{event.id}}/confirm/';
-        var cancelUrlBase = 'http://localhost:8000/evento/{{event.id}}/cancel/';
+        var confirmUrlBase = 'https://projeto-karla.herokuapp.com/evento/{{event.id}}/confirm/';
+        var cancelUrlBase = 'https://projeto-karla.herokuapp.com/evento/{{event.id}}/cancel/';
 
         function confirm() {
             if (guestName.value.length < 5) {
