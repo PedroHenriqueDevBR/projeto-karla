@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import *
-from pdb import set_trace
 
 
 def login_page(request):
@@ -13,13 +12,6 @@ def login_page(request):
     if request.method == 'POST':
         username = request.POST.get('username_login')
         password = request.POST.get('password_login')
-
-        print('=' * 50)
-        print('Person login')
-        print('=' * 50)
-        print('Username: {}'.format(username))
-        print('Password: {}'.format(password))
-        print('=' * 50)
 
         user = authenticate(request, username=username, password=password)
 
@@ -49,14 +41,6 @@ def user_register_page(request):
         password = request.POST.get('password')
         password_repeat = request.POST.get('password-repeat')
 
-        print('='*50)
-        print('Person register')
-        print('='*50)
-        print('Name: {}'.format(name))
-        print('Username: {}'.format(username))
-        print('Password: {}'.format(password))
-        print('='*50)
-
         user_registered = User.objects.filter(username=username)
         if len(user_registered) == 0:
             user = User.objects.create_user(
@@ -78,7 +62,10 @@ def user_register_page(request):
 
 @login_required(login_url='login')
 def dashboard_page(request):
-    person = request.user.person
+    try:
+        person = request.user.person
+    except:
+        return redirect('login')
     events = person.events.all()
 
     if request.method == 'POST':
