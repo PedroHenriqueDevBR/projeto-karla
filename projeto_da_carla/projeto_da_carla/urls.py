@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path
+from django.urls.conf import include
 from core.views import *
 
 urlpatterns = [
@@ -11,4 +12,6 @@ urlpatterns = [
     path('evento/<int:pk>/confirm/<str:name>', confirm, name='confirm'),
     path('evento/<int:pk>/cancel/<str:name>', cancel, name='cancel'),
     path('evento/<int:pk>/<str:title>', event_page, name='event'),
+
+    path('api/v1/', include('api_v1.urls')),
 ]
