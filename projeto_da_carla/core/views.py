@@ -1,3 +1,4 @@
+from django.contrib.messages.api import error
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -5,6 +6,28 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import *
 from pdb import set_trace
+
+
+def create_user_or_errors(user_data):
+    errors = []
+    name = user_data['name']
+    username = user_data['username']
+    password = user_data['password']
+    user_registered = User.objects.filter(username=username)
+    if len(user_registered) == 0:
+        user = User.objects.create_user(
+            username=username,
+            first_name=name,
+            password=password,
+            email='mail@mail.com'
+        )
+        person = Person()
+        person.name = name
+        person.user = user
+        person.save()
+    else:
+        errors.append('Username already exists')
+    return errors
 
 
 def login_page(request):

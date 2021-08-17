@@ -1,4 +1,4 @@
-def validate_person_register_form(data):
+def validate_person_register_form_or_errors(data):
     errors = []
     
     if not 'name' in data:
