@@ -147,9 +147,17 @@
                         <td>{{ response.guest_name }}</td>
                         <td>
                             {% if response.confirm %}
-                            {{ event.confirm_text }}
+                                {% if event.confirm_text %}
+                                {{ event.confirm_text }}
+                                {% else %}
+                                Confirmar
+                                {% endif %}    
                             {% else %}
-                            {{event.cancel_text}}
+                                {% if event.cancel_text %}
+                                {{ event.cancel_text }}
+                                {% else %}
+                                Cancelar
+                                {% endif %}    
                             {% endif %}
                         </td>
                     </tr>

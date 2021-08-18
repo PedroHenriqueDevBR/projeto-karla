@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import *
-from pdb import set_trace
 
 
 def create_user_or_errors(user_data):
@@ -142,6 +141,7 @@ def event_page(request, pk, title):
             event.save()
         if is_owner:
             responses = event.responses.all()
+        # import pdb; pdb.set_trace()
         return render(request, 'event.html', {'event': event, 'is_owner': is_owner, 'responses': responses,})
     else:
         return redirect('login')
@@ -151,7 +151,7 @@ def confirm(request, pk, name):
     if len(event) == 0:
         return redirect('login')
 
-    response = Response()
+    response = EventResponse()
     response.guest_name = name
     response.confirm = True
     response.event = event[0]
@@ -163,7 +163,7 @@ def cancel(request, pk, name):
     if len(event) == 0:
         return redirect('login')
 
-    response = Response()
+    response = EventResponse()
     response.guest_name = name
     response.confirm = True
     response.event = event[0]
