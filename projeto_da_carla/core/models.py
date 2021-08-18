@@ -13,7 +13,7 @@ class Event(models.Model):
     background = models.CharField(max_length=150, null=True, blank=True)
     confirm_text = models.CharField(max_length=20, null=True, blank=True)
     cancel_text = models.CharField(max_length=20, null=True, blank=True)
-    expiration_date = models.DateField()
+    expiration_date = models.CharField(max_length=50, null=True, blank=True)
     password = models.CharField(max_length=50, default='')
     person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='events')
 

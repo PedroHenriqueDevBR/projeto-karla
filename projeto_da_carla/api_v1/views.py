@@ -6,6 +6,7 @@ from core.models import EventResponse
 from .serializers import *
 from core.form_validator import event_register_validate_form_or_errors, person_register_validate_form_or_errors
 from core.views import create_user_or_errors
+from datetime import datetime
 
 
 class RegisterView(APIView):
@@ -45,13 +46,61 @@ class EventListView(APIView):
                 background =  data['background'] if 'background' in data else None,
                 confirm_text =  data['confirm_text'] if 'confirm_text' in data else None,
                 cancel_text =  data['cancel_text'] if 'cancel_text' in data else None,
-                expiration_date =  data['expiration_date'] if 'expiration_date' in data else None,
-                password =  data['password'] if 'password' in data else None,
+                expiration_date = data['expiration_date'] if 'expiration_date' in data else None,
+                password =  data['password'] if 'password' in data else '',
                 person = request.user.person,
             )
 
+            event.save()
             serializer = EventSerializer(event)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+
+
+class EventEditView(APIView):
+    name = 'event-edit-view'
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            event = Event.objects.get(pk=pk)
+            serializer = EventSerializer(event)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, pk):
+        try:
+            event = Event.objects.get(pk=pk)
+            if event.person.id != request.user.person.id:
+                return Response({'errors': ['access denied']}, status=status.HTTP_401_UNAUTHORIZED)
+        except:
+            return Response({'errors': ['event not found']}, status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data
+        form_errors = event_register_validate_form_or_errors(data)        
+        if len(form_errors) > 0:
+            return Response({'errors': form_errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        event.title = data['title'][0]
+        event.description = data['description'] if 'description' in data else 'Sem descrição'
+        event.avatar =  data['avatar'] if 'avatar' in data else None
+        event.background =  data['background'] if 'background' in data else None
+        event.confirm_text =  data['confirm_text'] if 'confirm_text' in data else None
+        event.cancel_text =  data['cancel_text'] if 'cancel_text' in data else None
+        event.expiration_date = data['expiration_date'] if 'expiration_date' in data else None
+        event.password =  data['password'] if 'password' in data else ''
+        event.save()
+        serializer = EventSerializer(event)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, pk):
+        try:
+            event = Event.objects.get(pk=pk)
+            if event.person.id != request.user.person.id:
+                return Response({'errors': ['access denied']}, status=status.HTTP_401_UNAUTHORIZED)
+            event.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except:
+            return Response({'errors': ['event not found']}, status=status.HTTP_400_BAD_REQUEST)
