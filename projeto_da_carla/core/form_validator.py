@@ -40,3 +40,20 @@ def event_register_validate_form_or_errors(data):
         except:
             errors.append('Invalid date format')
     return errors
+
+
+def response_register_validate_form_or_errors(data):
+    errors = []
+    
+    if not 'guest_name' in data:
+        errors.append('guest_name is required')
+    else:
+        if len(data['guest_name']) < 3:
+            errors.append('guest_name must be at least 3 characters')
+    if not 'confirm' in data:
+        errors.append('confirm is required')
+    else:
+        if type(data['confirm']) is not bool:
+            errors.append('confirm must be boolean data')
+
+    return errors

@@ -1,12 +1,11 @@
-from rest_framework import serializers, status
+from rest_framework import status
+from rest_framework import response
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from core.models import EventResponse
 from .serializers import *
-from core.form_validator import event_register_validate_form_or_errors, person_register_validate_form_or_errors
+from core.form_validator import *
 from core.views import create_user_or_errors
-from datetime import datetime
 
 
 class RegisterView(APIView):
@@ -58,9 +57,8 @@ class EventListView(APIView):
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class EventEditView(APIView):
-    name = 'event-edit-view'
-    permission_classes = [IsAuthenticated]
+class EventView(APIView):
+    name = 'event-view'
 
     def get(self, request, pk):
         try:
@@ -68,7 +66,12 @@ class EventEditView(APIView):
             serializer = EventSerializer(event)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class EventEditView(APIView):
+    name = 'event-edit-view'
+    permission_classes = [IsAuthenticated]
 
     def put(self, request, pk):
         try:
@@ -76,14 +79,14 @@ class EventEditView(APIView):
             if event.person.id != request.user.person.id:
                 return Response({'errors': ['access denied']}, status=status.HTTP_401_UNAUTHORIZED)
         except:
-            return Response({'errors': ['event not found']}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'errors': ['event not found']}, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data
         form_errors = event_register_validate_form_or_errors(data)        
         if len(form_errors) > 0:
             return Response({'errors': form_errors}, status=status.HTTP_400_BAD_REQUEST)
 
-        event.title = data['title'][0]
+        event.title = data['title']
         event.description = data['description'] if 'description' in data else 'Sem descrição'
         event.avatar =  data['avatar'] if 'avatar' in data else None
         event.background =  data['background'] if 'background' in data else None
@@ -103,4 +106,63 @@ class EventEditView(APIView):
             event.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except:
-            return Response({'errors': ['event not found']}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'errors': ['event not found']}, status=status.HTTP_404_NOT_FOUND)
+
+
+class EventResponseListView(APIView):
+    name = 'event-response-list-view'
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, event_pk):
+        try:
+            try:
+                event = Event.objects.get(pk=event_pk)
+                if event.person.id != request.user.person.id:
+                    return Response({'errors': ['access denied']}, status=status.HTTP_401_UNAUTHORIZED)
+            except:
+                return Response({'errors': ['Event not found']}, status=status.HTTP_404_NOT_FOUND)
+            responses = event.responses.all()
+            serializer = ResponseSerializer(responses, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class EventResponseAddView(APIView):
+    name = 'event-response-add-view'
+
+    def post(self, request, event_pk):
+        data = request.data
+        form_errors = response_register_validate_form_or_errors(data)
+        if len(form_errors) > 0:
+            return Response({'errors': form_errors}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            event = Event.objects.get(pk=event_pk)
+        except:
+            return Response({'errors': ['event not found']}, status=status.HTTP_404_NOT_FOUND)
+        responseData = EventResponse(
+            guest_name = data['guest_name'],
+            confirm = data['confirm'],
+            event = event
+        )
+        try:
+            responseData.save()
+            serializer = ResponseSerializer(responseData)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class EventResponseDeleteView(APIView):
+    name = 'event-response-delete-view'
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, event_pk, response_pk):
+        try:
+            response = EventResponse.objects.get(pk=response_pk)
+            if response.event.person.id != request.user.person.id or response.event.id != event_pk:
+                return Response({'errors': ['access denied']}, status=status.HTTP_401_UNAUTHORIZED)
+            response.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except:
+            return Response({'errors': ['event not found']}, status=status.HTTP_404_NOT_FOUND)

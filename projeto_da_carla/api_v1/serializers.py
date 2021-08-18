@@ -6,6 +6,7 @@ class EventSerializer(ModelSerializer):
     class Meta:
         model = Event
         fields = [
+            'id',
             'title',
             'description',
             'avatar',
@@ -21,6 +22,7 @@ class ResponseSerializer(ModelSerializer):
     class Meta:
         model = EventResponse
         fields = [
+            'id',
             'response_date',
             'guest_name',
             'confirm',
