@@ -165,7 +165,7 @@ def cancel(request, pk, name):
 
     response = EventResponse()
     response.guest_name = name
-    response.confirm = True
+    response.confirm = False
     response.event = event[0]
     response.save()
     return render(request, 'thank.html')
