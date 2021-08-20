@@ -5,7 +5,7 @@ import './client_http_interface.dart';
 import './http_response_model.dart';
 
 class HTTPClientService implements IClientHTTP {
-  String _getBaseUrl(String path) => 'http://192.168.2.3:8000${path}';
+  String _getBaseUrl(String path) => 'http://127.0.0.1:8000/api/$path';
 
   Map<String, String> _setAuthorization({String? key}) {
     Map<String, String> map = {};
@@ -27,6 +27,7 @@ class HTTPClientService implements IClientHTTP {
         headers: response.headers,
       );
     } catch (error) {
+      print(error);
       throw HttpException('GET: execute error');
     }
   }
@@ -39,10 +40,11 @@ class HTTPClientService implements IClientHTTP {
       http.Response response = await http.post(uri, body: data, headers: headers);
       return HttpResponseModel(
         statusCode: response.statusCode,
-        data: json.decode(response.body),
+        data: json.decode(response.body.isNotEmpty ? response.body : '{}'),
         headers: response.headers,
       );
     } catch (error) {
+      print(error);
       throw HttpException('POST: Execute error');
     }
   }
@@ -55,7 +57,7 @@ class HTTPClientService implements IClientHTTP {
       http.Response response = await http.put(uri, body: data, headers: headers);
       return HttpResponseModel(
         statusCode: response.statusCode,
-        data: json.decode(response.body),
+        data: json.decode(response.body.isNotEmpty ? response.body : '{}'),
         headers: response.headers,
       );
     } catch (error) {
@@ -71,7 +73,7 @@ class HTTPClientService implements IClientHTTP {
       http.Response response = await http.delete(uri, headers: headers);
       return HttpResponseModel(
         statusCode: response.statusCode,
-        data: '',
+        data: json.decode(response.body.isNotEmpty ? response.body : '{}'),
         headers: response.headers,
       );
     } catch (error) {

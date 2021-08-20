@@ -19,4 +19,12 @@ class UserModel {
         username: '',
         password: '',
       );
+
+  Map<String, String> toMap() {
+    return {
+      'name': this.name,
+      'username': this.username,
+      'password': this.password,
+    };
+  }
 }
