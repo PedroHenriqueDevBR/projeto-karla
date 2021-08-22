@@ -1,8 +1,10 @@
 import 'dart:io';
 
-import 'package:projeto_karla/src/shared/exceptions/invalid_data_exception.dart';
-import 'package:projeto_karla/src/shared/models/user_model.dart';
-import 'package:projeto_karla/src/shared/services/client_http_interface.dart';
+import 'package:projeto_karla/src/shared/exceptions/http_response_exception.dart';
+
+import '../exceptions/invalid_data_exception.dart';
+import '../models/user_model.dart';
+import '../services/client_http_interface.dart';
 
 class UserRepository {
   IClientHTTP _client;
@@ -23,7 +25,7 @@ class UserRepository {
         throw error;
       }
     }
-    throw InvalidDataException(message: errors);
+    throw InvalidDataException(errors: errors);
   }
 
   Future<bool> registerUser(UserModel user) async {
@@ -33,19 +35,12 @@ class UserRepository {
       try {
         final response = await _client.post(url, user.toMap());
         if (response.statusCode >= 200 && response.statusCode < 300) return true;
-        if (response.data['errors'] != null) {
-          List<String> errors = [];
-          for (dynamic item in response.data['errors']) {
-            errors.add(item.toString());
-          }
-          throw InvalidDataException(message: errors);
-        }
-        throw HttpException('Status: ${response.statusCode}');
+        throw HttpResponseException(response: response);
       } catch (error) {
         throw error;
       }
     }
-    throw InvalidDataException(message: errors);
+    throw InvalidDataException(errors: errors);
   }
 
   List<String> _validToLoginOrErrors(UserModel user) {

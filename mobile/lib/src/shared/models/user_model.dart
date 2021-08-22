@@ -20,7 +20,7 @@ class UserModel {
         password: '',
       );
 
-  Map<String, String> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'name': this.name,
       'username': this.username,

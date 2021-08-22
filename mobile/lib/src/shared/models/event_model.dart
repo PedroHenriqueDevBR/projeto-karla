@@ -28,7 +28,7 @@ class EventModel {
         expirationDate: DateTime.now(),
       );
 
-  factory EventModel.fromRestAPI(Map data) => EventModel(
+  factory EventModel.fromRestAPI(var data) => EventModel(
         id: data['id'],
         title: data['title'],
         description: data['description'],
@@ -39,11 +39,24 @@ class EventModel {
         password: data['password'],
       );
 
-  static List<EventModel> fromResponseList(List<Map> list) {
+  static List<EventModel> fromResponseList(List<dynamic> list) {
     List<EventModel> events = [];
-    for (Map item in list) {
+    for (var item in list) {
       events.add(EventModel.fromRestAPI(item));
     }
     return events;
+  }
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
+      'title': this.title,
+      'description': this.description,
+      'expiration_date': this.expirationDate.toIso8601String(),
+    };
+    if (this.background != null) map['background'] = this.background;
+    if (this.confirmText != null) map['confirm_text'] = this.confirmText;
+    if (this.cancelText != null) map['cancel_text'] = this.cancelText;
+    if (this.password != null) map['password'] = this.password;
+    return map;
   }
 }

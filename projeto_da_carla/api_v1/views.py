@@ -19,7 +19,7 @@ class RegisterView(APIView):
         create_user_errors = create_user_or_errors(data)
         if len(create_user_errors) > 0:
             print('create_user_errors')
-            return Response({'errors': create_user_errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'errors': create_user_errors}, status=status.HTTP_406_NOT_ACCEPTABLE)
         return Response(status=status.HTTP_201_CREATED)
 
 

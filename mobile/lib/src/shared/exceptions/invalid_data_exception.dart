@@ -1,6 +1,6 @@
 class InvalidDataException implements Exception {
-  List<String> message;
+  List<String> errors;
   InvalidDataException({
-    required this.message,
+    required this.errors,
   });
 }
