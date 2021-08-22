@@ -28,7 +28,7 @@ class EventModel {
         expirationDate: DateTime.now(),
       );
 
-  factory EventModel.fromRestAPI(var data) => EventModel(
+  factory EventModel.fromRestAPI(dynamic data) => EventModel(
         id: data['id'],
         title: data['title'],
         description: data['description'],
@@ -41,7 +41,7 @@ class EventModel {
 
   static List<EventModel> fromResponseList(List<dynamic> list) {
     List<EventModel> events = [];
-    for (var item in list) {
+    for (dynamic item in list) {
       events.add(EventModel.fromRestAPI(item));
     }
     return events;

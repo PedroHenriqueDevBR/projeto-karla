@@ -52,7 +52,7 @@ class EventRepository {
       String jwt = await _appData.getJWT();
       try {
         final response = await _client.put(url, event.toMap(), jwtKey: jwt);
-        if (response.statusCode < 200 && response.statusCode >= 300) {
+        if (response.statusCode < 200 || response.statusCode >= 300) {
           throw HttpResponseException(response: response);
         }
         return;

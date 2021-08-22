@@ -9,8 +9,7 @@ main() {
 
   test('Should be a true on register user', () async {
     UserModel user = UserModel(name: 'Pedro Henrique', username: 'pedro5', password: 'pedro123');
-    final response = await _userRepository.registerUser(user);
-    expect(response, equals(true));
+    await _userRepository.registerUser(user);
   });
 
   test('Should login user', () async {

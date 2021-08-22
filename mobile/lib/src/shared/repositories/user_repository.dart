@@ -28,14 +28,15 @@ class UserRepository {
     throw InvalidDataException(errors: errors);
   }
 
-  Future<bool> registerUser(UserModel user) async {
+  Future<void> registerUser(UserModel user) async {
     List<String> errors = _validToRegisterOrErrors(user);
     if (errors.isEmpty) {
       String url = 'v1/register';
       try {
         final response = await _client.post(url, user.toMap());
-        if (response.statusCode >= 200 && response.statusCode < 300) return true;
-        throw HttpResponseException(response: response);
+        if (response.statusCode < 200 || response.statusCode >= 300) {
+          throw HttpResponseException(response: response);
+        }
       } catch (error) {
         throw error;
       }
