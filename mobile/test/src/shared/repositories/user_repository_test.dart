@@ -1,20 +1,52 @@
-@Skip()
 import 'package:flutter_test/flutter_test.dart';
 import 'package:projeto_karla/src/shared/models/user_model.dart';
 import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
-import 'package:projeto_karla/src/shared/services/dio_client_service.dart';
+import 'package:projeto_karla/src/shared/services/client_http_interface.dart';
+import 'package:projeto_karla/src/shared/services/http_response_model.dart';
+import 'package:mocktail/mocktail.dart';
+
+class HttpMock extends Mock implements IClientHTTP {}
 
 main() {
-  late UserRepository _userRepository = UserRepository(client: DioClientService());
+  final _client = HttpMock();
+  UserRepository _userRepository = UserRepository(client: _client);
 
   test('Should be a true on register user', () async {
-    UserModel user = UserModel(name: 'Pedro Henrique', username: 'pedro8', password: 'pedro123');
+    when(() => _client.post(any(), any())).thenAnswer((_) async => HttpResponseModel(
+          statusCode: 200,
+          data: registerUserResponse,
+          headers: {},
+        ));
+    UserModel user = UserModel(
+      name: 'Pedro Henrique',
+      username: 'pedro8',
+      password: 'pedro123',
+    );
     await _userRepository.registerUser(user);
   });
 
   test('Should login user', () async {
     UserModel user = UserModel(name: 'Pedro', username: 'kakaroto', password: 'kakaroto');
+    when(() => _client.post(any(), any())).thenAnswer((_) async => HttpResponseModel(
+          statusCode: 200,
+          data: loginResponse,
+          headers: {},
+        ));
     final response = await _userRepository.loginAndResponseJWTKey(user);
     expect(response, isA<String>());
+    expect(response, equals(loginResponse['access']));
   });
 }
+
+Map registerUserResponse = {
+  "name": "Pedro Henrique",
+  "username": "kakaroto",
+  "password": "kakaroto",
+};
+
+Map loginResponse = {
+  "refresh":
+      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzMTkzMjM5MCwianRpIjoiZmVmNWFmZWNjOTdkNDE5M2JiMWM2M2U0NzA2MjFjMTYiLCJ1c2VyX2lkIjoxfQ.xgxWolul7o96CPaTrbYAITc1nmY1rshRpIGg1UdbUFE",
+  "access":
+      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjI5ODU4NzkwLCJqdGkiOiJmZmI0NGE1MWNlZDA0MTc5OTdjMTg5ZDcwZmI1MWRmOSIsInVzZXJfaWQiOjF9.hfGwCmSbRXD-Y-kiQPuPAtgBZn3YlDkVcQ8NVU5F8ck"
+};

@@ -1,5 +1,3 @@
-import 'package:http/http.dart';
-
 import '../exceptions/http_response_exception.dart';
 import '../exceptions/invalid_data_exception.dart';
 import '../models/event_model.dart';
