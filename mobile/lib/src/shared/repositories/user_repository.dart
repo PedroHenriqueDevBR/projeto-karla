@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:projeto_karla/src/shared/exceptions/http_response_exception.dart';
-
+import '../exceptions/http_response_exception.dart';
 import '../exceptions/invalid_data_exception.dart';
 import '../models/user_model.dart';
 import '../services/client_http_interface.dart';
@@ -37,6 +36,7 @@ class UserRepository {
         if (response.statusCode < 200 || response.statusCode >= 300) {
           throw HttpResponseException(response: response);
         }
+        return;
       } catch (error) {
         throw error;
       }

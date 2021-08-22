@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:projeto_karla/src/shared/models/event_model.dart';
 import 'package:projeto_karla/src/shared/repositories/event_repository.dart';
 import 'package:projeto_karla/src/shared/services/app_data_interface.dart';
-import 'package:projeto_karla/src/shared/services/http_client_service.dart';
+import 'package:projeto_karla/src/shared/services/dio_client_service.dart';
 
 class JwtMock implements IAppData {
   @override
@@ -17,7 +17,7 @@ class JwtMock implements IAppData {
 
 main() {
   EventRepository _repository = EventRepository(
-    client: HTTPClientService(),
+    client: DioClientService(),
     appData: JwtMock(),
   );
 
@@ -39,12 +39,18 @@ main() {
 
   test('Should run a update data', () async {
     EventModel event = EventModel(
-      id: 7,
-      title: 'Updated',
+      id: 6,
+      title: 'Updated again',
       description: 'text',
       expirationDate: DateTime.parse('2021-08-26'),
       confirmText: 'Posso ir',
     );
     await _repository.updateEvent(event);
+  });
+
+  test('Should delete EventModel', () async {
+    final event = EventModel.empty();
+    event.id = 7;
+    await _repository.deleteEvent(event);
   });
 }
