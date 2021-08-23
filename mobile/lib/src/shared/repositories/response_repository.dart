@@ -17,7 +17,6 @@ class ResponseRepository {
     final errors = _validToSaveOrErrors(responseModel);
     errors.addAll(_isEventValidOrErrors(event));
     if (errors.isNotEmpty) throw InvalidDataException(errors: errors);
-
     String url = 'v1/events/${event.id}/responses/add';
     try {
       final response = await _client.post(url, responseModel.toMap());
@@ -34,7 +33,6 @@ class ResponseRepository {
   Future<List<ResponseModel>> getResponsesFromEvent(EventModel event) async {
     final errors = _isEventValidOrErrors(event);
     if (errors.isNotEmpty) throw InvalidDataException(errors: errors);
-
     String url = 'v1/events/${event.id}/responses';
     String jwt = await _appData.getJWT();
     try {
@@ -54,7 +52,6 @@ class ResponseRepository {
     if (errors.isNotEmpty) throw InvalidDataException(errors: errors);
     String url = 'v1/events/${event.id}/responses/del/${responseModel.id}';
     String jwt = await _appData.getJWT();
-
     try {
       final response = await _client.delete(url, jwtKey: jwt);
       if (response.statusCode < 200 || response.statusCode >= 300) {

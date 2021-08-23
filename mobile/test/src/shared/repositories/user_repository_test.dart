@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:projeto_karla/src/shared/exceptions/invalid_data_exception.dart';
 import 'package:projeto_karla/src/shared/models/user_model.dart';
 import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
 import 'package:projeto_karla/src/shared/services/client_http_interface.dart';
@@ -10,6 +11,11 @@ class HttpMock extends Mock implements IClientHTTP {}
 main() {
   final _client = HttpMock();
   UserRepository _userRepository = UserRepository(client: _client);
+
+  test('Should be error on invalid data', () async {
+    final user = UserModel(name: 'a', username: 'a', password: 'a');
+    expect(() async => await _userRepository.registerUser(user), throwsA(TypeMatcher<InvalidDataException>()));
+  });
 
   test('Should be a true on register user', () async {
     when(() => _client.post(any(), any())).thenAnswer((_) async => HttpResponseModel(

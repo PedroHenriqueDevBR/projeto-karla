@@ -14,20 +14,18 @@ class EventRepository {
 
   Future<EventModel> addEvent(EventModel event) async {
     final errors = _validToSaveOrErrors(event);
-    if (errors.isEmpty) {
-      String url = 'v1/events';
-      String jwt = await _appData.getJWT();
-      try {
-        final response = await _client.post(url, event.toMap(), jwtKey: jwt);
-        if (response.statusCode >= 200 && response.statusCode < 300) {
-          return EventModel.fromRestAPI(response.data);
-        }
-        throw HttpResponseException(response: response);
-      } catch (error) {
-        throw error;
+    if (errors.isNotEmpty) throw InvalidDataException(errors: errors);
+    String url = 'v1/events';
+    String jwt = await _appData.getJWT();
+    try {
+      final response = await _client.post(url, event.toMap(), jwtKey: jwt);
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return EventModel.fromRestAPI(response.data);
       }
+      throw HttpResponseException(response: response);
+    } catch (error) {
+      throw error;
     }
-    throw InvalidDataException(errors: errors);
   }
 
   Future<List<EventModel>> getAllEvents() async {
@@ -47,38 +45,34 @@ class EventRepository {
   Future<void> updateEvent(EventModel event) async {
     final errors = _validToSaveOrErrors(event);
     errors.addAll(_validToUpdateOrErrors(event));
-    if (errors.isEmpty) {
-      String url = 'v1/events/${event.id}';
-      String jwt = await _appData.getJWT();
-      try {
-        final response = await _client.put(url, event.toMap(), jwtKey: jwt);
-        if (response.statusCode < 200 || response.statusCode >= 300) {
-          throw HttpResponseException(response: response);
-        }
-        return;
-      } catch (error) {
-        throw error;
+    if (errors.isNotEmpty) throw InvalidDataException(errors: errors);
+    String url = 'v1/events/${event.id}';
+    String jwt = await _appData.getJWT();
+    try {
+      final response = await _client.put(url, event.toMap(), jwtKey: jwt);
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw HttpResponseException(response: response);
       }
+      return;
+    } catch (error) {
+      throw error;
     }
-    throw InvalidDataException(errors: errors);
   }
 
   Future<void> deleteEvent(EventModel event) async {
     final errors = _validToUpdateOrErrors(event);
-    if (errors.isEmpty) {
-      String url = 'v1/events/${event.id}';
-      String jwt = await _appData.getJWT();
-      try {
-        final response = await _client.delete(url, jwtKey: jwt);
-        if (response.statusCode < 200 || response.statusCode >= 300) {
-          throw HttpResponseException(response: response);
-        }
-        return;
-      } catch (error) {
-        throw error;
+    if (errors.isNotEmpty) throw InvalidDataException(errors: errors);
+    String url = 'v1/events/${event.id}';
+    String jwt = await _appData.getJWT();
+    try {
+      final response = await _client.delete(url, jwtKey: jwt);
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw HttpResponseException(response: response);
       }
+      return;
+    } catch (error) {
+      throw error;
     }
-    throw InvalidDataException(errors: errors);
   }
 
   List<String> _validToUpdateOrErrors(EventModel event) {

@@ -12,70 +12,56 @@ class UserRepository {
 
   Future<String> loginAndResponseJWTKey(UserModel user) async {
     final errors = _validToLoginOrErrors(user);
-    if (errors.isEmpty) {
-      String url = 'token/';
-      try {
-        final response = await _client.post(url, user.toMap());
-        if (response.statusCode >= 200 && response.statusCode < 300) {
-          return response.data['access'];
-        }
-        throw HttpException('Status: ${response.statusCode}');
-      } catch (error) {
-        throw error;
+    if (errors.isNotEmpty) throw InvalidDataException(errors: errors);
+    String url = 'token/';
+    try {
+      final response = await _client.post(url, user.toMap());
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return response.data['access'];
       }
+      throw HttpException('Status: ${response.statusCode}');
+    } catch (error) {
+      throw error;
     }
-    throw InvalidDataException(errors: errors);
   }
 
   Future<void> registerUser(UserModel user) async {
-    List<String> errors = _validToRegisterOrErrors(user);
-    if (errors.isEmpty) {
-      String url = 'v1/register';
-      try {
-        final response = await _client.post(url, user.toMap());
-        if (response.statusCode < 200 || response.statusCode >= 300) {
-          throw HttpResponseException(response: response);
-        }
-        return;
-      } catch (error) {
-        throw error;
+    final errors = _validToRegisterOrErrors(user);
+    if (errors.isNotEmpty) throw InvalidDataException(errors: errors);
+    String url = 'v1/register';
+    try {
+      final response = await _client.post(url, user.toMap());
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw HttpResponseException(response: response);
       }
+      return;
+    } catch (error) {
+      throw error;
     }
-    throw InvalidDataException(errors: errors);
   }
 
   List<String> _validToLoginOrErrors(UserModel user) {
     List<String> errors = [];
-    if (user.username.isEmpty) {
+    if (user.username.isEmpty)
       errors.add('username não ser vazio');
-    } else {
-      if (user.username.length < 5) errors.add('username deve ter pelo menos 5 caracteres');
-    }
-    if (user.password.isEmpty) {
+    else if (user.username.length < 5) errors.add('username deve ter pelo menos 5 caracteres');
+    if (user.password.isEmpty)
       errors.add('senha não ser vazio');
-    } else {
-      if (user.password.length < 8) errors.add('senha deve ter pelo menos 8 caracteres');
-    }
+    else if (user.password.length < 8) errors.add('senha deve ter pelo menos 8 caracteres');
     return errors;
   }
 
   List<String> _validToRegisterOrErrors(UserModel user) {
     List<String> errors = [];
-    if (user.name.isEmpty) {
+    if (user.name.isEmpty)
       errors.add('nome não pode ser vazio');
-    } else {
-      if (user.name.length < 3) errors.add('nome deve possuir pelo menos 3 caracteres');
-    }
-    if (user.username.isEmpty) {
+    else if (user.name.length < 3) errors.add('nome deve possuir pelo menos 3 caracteres');
+    if (user.username.isEmpty)
       errors.add('username não pode ser vazio');
-    } else {
-      if (user.username.length < 5) errors.add('username deve ter pelo menos 5 caracteres');
-    }
-    if (user.password.isEmpty) {
+    else if (user.username.length < 5) errors.add('username deve ter pelo menos 5 caracteres');
+    if (user.password.isEmpty)
       errors.add('senha não pode ser vazio');
-    } else {
-      if (user.password.length < 8) errors.add('senha deve ter pelo menos 8 caracteres');
-    }
+    else if (user.password.length < 8) errors.add('senha deve ter pelo menos 8 caracteres');
     return errors;
   }
 }
