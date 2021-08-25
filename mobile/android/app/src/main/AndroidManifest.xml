@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.github.pedrohenriquedevbr.projeto.karla.projeto_karla">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="projeto_karla"
         android:icon="@mipmap/ic_launcher">

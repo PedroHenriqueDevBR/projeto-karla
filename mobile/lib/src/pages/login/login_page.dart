@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_karla/src/shared/core/images.dart';
+import 'package:projeto_karla/src/pages/login/widgets/login_form_widget.dart';
+import 'package:projeto_karla/src/pages/login/widgets/register_user_widget.dart';
+import 'package:projeto_karla/src/pages/login/widgets/video_background_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,75 +11,36 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  AppImages _appImages = AppImages();
-  final _formKey = GlobalKey<FormState>();
+  PageController _pageController = PageController(initialPage: 0);
 
-  List<Widget> _pages = [];
+  void goRegisterUserPage() {
+    _pageController.nextPage(duration: Duration(milliseconds: 750), curve: Curves.easeIn);
+  }
+
+  void goLoginPage() {
+    _pageController.previousPage(duration: Duration(milliseconds: 750), curve: Curves.easeIn);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          width: size.width,
-          height: size.height,
-          decoration: BoxDecoration(
-            color: Colors.purple,
-            image: DecorationImage(
-              image: AssetImage(_appImages.background),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Center(
-            child: Wrap(
-              children: [
-                Card(
-                  margin: const EdgeInsets.all(16.0),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
-                    child: _formLogin(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _formLogin() {
-    return Form(
-      key: _formKey,
-      child: Column(
+      body: Stack(
         children: [
-          Text('Acesso'),
-          SizedBox(height: 16.0),
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: 'Username',
-              hintText: 'Digite o seu nome de usuário',
-            ),
-          ),
-          SizedBox(height: 16.0),
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: 'Senha',
-              hintText: 'Digite a sua senha',
-            ),
-          ),
-          SizedBox(height: 16.0),
-          Row(children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Text('Entrar'),
+          VideoBackgroundWidget(),
+          SingleChildScrollView(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: PageView(
+                controller: _pageController,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  LoginFormWidget(onBottomButtomPresset: goRegisterUserPage),
+                  RegisterUserFormWidget(onBottomButtomPresset: goLoginPage),
+                ],
               ),
             ),
-          ]),
-          SizedBox(height: 16.0),
-          TextButton(onPressed: () {}, child: Text('Ainda não possui cadastro?\nClique aqui e cadastre-se')),
+          ),
         ],
       ),
     );
