@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
 
 class LoginFormWidget extends StatefulWidget {
   VoidCallback onBottomButtomPresset;
@@ -13,6 +14,7 @@ class LoginFormWidget extends StatefulWidget {
 
 class _LoginFormWidgetState extends State<LoginFormWidget> {
   GlobalKey<FormState> _formKeyLogin = GlobalKey<FormState>();
+  AppTextTheme _textTheme = AppTextTheme();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
         key: _formKeyLogin,
         child: Column(
           children: [
-            Text('Acesso'),
+            Text(
+              'Login',
+              style: _textTheme.titleStyle,
+            ),
             SizedBox(height: 16.0),
             TextFormField(
               decoration: InputDecoration(
@@ -62,7 +67,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             SizedBox(height: 16.0),
             TextButton(
               onPressed: widget.onBottomButtomPresset,
-              child: Text('Ainda não possui cadastro?\nClique aqui e cadastre-se'),
+              child: Text(
+                'Ainda não possui cadastro?\nClique aqui e cadastre-se',
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         ),

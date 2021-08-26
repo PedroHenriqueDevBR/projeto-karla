@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
 
 class RegisterUserFormWidget extends StatefulWidget {
   VoidCallback onBottomButtomPresset;
@@ -13,6 +14,7 @@ class RegisterUserFormWidget extends StatefulWidget {
 
 class _RegisterUserFormWidgetState extends State<RegisterUserFormWidget> {
   GlobalKey<FormState> _formKeyRegister = GlobalKey<FormState>();
+  AppTextTheme _textTheme = AppTextTheme();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,10 @@ class _RegisterUserFormWidgetState extends State<RegisterUserFormWidget> {
         key: _formKeyRegister,
         child: Column(
           children: [
-            Text('Cadastro'),
+            Text(
+              'Novo usuário',
+              style: _textTheme.titleStyle,
+            ),
             SizedBox(height: 16.0),
             TextFormField(
               decoration: InputDecoration(
@@ -69,14 +74,17 @@ class _RegisterUserFormWidgetState extends State<RegisterUserFormWidget> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {},
-                  child: Text('Entrar'),
+                  child: Text('Cadastrar'),
                 ),
               ),
             ]),
             SizedBox(height: 16.0),
             TextButton(
               onPressed: widget.onBottomButtomPresset,
-              child: Text('Voltar ao login'),
+              child: Text(
+                'Já possui cadastro?\nfazer login',
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         ),

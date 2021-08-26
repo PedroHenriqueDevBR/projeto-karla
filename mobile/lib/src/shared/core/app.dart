@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:projeto_karla/src/pages/home/home_page.dart';
 import 'package:projeto_karla/src/pages/login/login_page.dart';
 import 'package:projeto_karla/src/shared/core/app_themes.dart';
@@ -8,8 +9,16 @@ class App extends StatelessWidget {
   final _appThemes = AppThemes();
   App({Key? key}) : super(key: key);
 
+  void changeNavigatorColor() {
+    final uiOverlay = SystemUiOverlayStyle.light.copyWith(
+      systemNavigationBarColor: Colors.black,
+    );
+    SystemChrome.setSystemUIOverlayStyle(uiOverlay);
+  }
+
   @override
   Widget build(BuildContext context) {
+    changeNavigatorColor();
     return MaterialApp(
       builder: asuka.builder,
       navigatorObservers: [
@@ -17,7 +26,7 @@ class App extends StatelessWidget {
       ],
       title: 'Projeto Karla',
       theme: _appThemes.lightTheme,
-      home: HomePage(),
+      home: LoginPage(),
     );
   }
 }

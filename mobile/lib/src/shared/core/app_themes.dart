@@ -5,7 +5,7 @@ class AppThemes {
   Color secondaryColor = Color(0XFF834790);
   TextTheme _defaulttextTheme = TextTheme();
 
-  ThemeData get lightTheme => ThemeData.light().copyWith(
+  ThemeData get lightTheme => ThemeData.dark().copyWith(
         primaryColor: primaryColor,
         accentColor: secondaryColor,
         elevatedButtonTheme: _elevatedButtonThemeData,
@@ -26,6 +26,7 @@ class AppThemes {
         style: ElevatedButton.styleFrom(
           elevation: 0,
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+          primary: primaryColor,
         ),
       );
 
