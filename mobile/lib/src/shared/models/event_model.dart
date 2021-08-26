@@ -39,6 +39,8 @@ class EventModel {
         password: data['password'],
       );
 
+  String get formatedDate => '${expirationDate.day}/${expirationDate.month}/${expirationDate.year}';
+
   static List<EventModel> fromResponseList(List<dynamic> list) {
     List<EventModel> events = [];
     for (dynamic item in list) {
