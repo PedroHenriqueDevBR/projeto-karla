@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_karla/src/pages/show_event/show_event_style.dart';
+import 'package:projeto_karla/src/pages/show_event/widgets/bottom_button_widget.dart';
+import 'package:projeto_karla/src/pages/show_event/widgets/bottom_navigation_widget.dart';
 import 'package:projeto_karla/src/pages/show_event/widgets/header_widget.dart';
 import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
-import 'package:projeto_karla/src/shared/core/assets.dart';
 import 'package:projeto_karla/src/shared/models/event_model.dart';
+import 'package:asuka/asuka.dart' as asuka;
+import 'package:projeto_karla/src/shared/models/response_model.dart';
 
 class ShowEventPage extends StatefulWidget {
   EventModel? eventModel;
@@ -14,13 +17,114 @@ class ShowEventPage extends StatefulWidget {
 
 class _ShowEventPageState extends State<ShowEventPage> {
   late EventModel event;
-  final _style = ShowEventStyle();
-  final _assets = AppAssets();
   final _textTheme = AppTextTheme();
   final _txtTitle = TextEditingController();
+  final _style = ShowEventStyle();
+  bool editing = false;
 
-  void initEvent(EventModel? event) {
-    this.event = event ?? EventModel.empty();
+  void initEvent(EventModel? eventArg) {
+    this.event = eventArg ?? EventModel.empty();
+    event.responses.addAll([
+      ResponseModel(guestName: 'Pedro', confirm: true, responseDate: DateTime.now()),
+      ResponseModel(guestName: 'Pedro', confirm: false, responseDate: DateTime.now()),
+      ResponseModel(guestName: 'Pedro', confirm: true, responseDate: DateTime.now()),
+      ResponseModel(guestName: 'Pedro', confirm: true, responseDate: DateTime.now()),
+      ResponseModel(guestName: 'Pedro', confirm: false, responseDate: DateTime.now()),
+    ]);
+  }
+
+  void toggleEdit() {
+    setState(() {
+      editing = !editing;
+    });
+  }
+
+  void showResponses() {
+    asuka.showBottomSheet(
+      (bottomSheetContext) => Container(
+        height: MediaQuery.of(bottomSheetContext).size.height - 220,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              decoration: _style.bottomSheetStyle.copyWith(color: Theme.of(context).cardColor),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Respostas',
+                    style: _textTheme.titleStyle.copyWith(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(bottomSheetContext);
+                    },
+                    icon: Icon(Icons.close),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: event.responses.length,
+                itemBuilder: (context, index) => ListTile(
+                  tileColor: index % 2 == 0 ? null : Colors.grey.withAlpha(50),
+                  title: Text(event.responses[index].guestName),
+                  trailing: Text(event.responses[index].confirm ? event.confirmTextFormated : event.cancelTextFormated),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void showAddResponseDialog() {
+    asuka.showDialog(
+      builder: (dialogContext) => AlertDialog(
+        title: Text('Nova resposta'),
+        content: Container(
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Nome do convidado',
+                  hintText: 'Digite o nome do convidado',
+                ),
+              ),
+              SizedBox(height: 80.0),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Salvar'),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(dialogContext),
+                      child: Text(
+                        'Cancelar resposta',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -38,13 +142,19 @@ class _ShowEventPageState extends State<ShowEventPage> {
             HeaderWidget(
               event: event,
               txtTitle: _txtTitle,
-              edit: false,
+              edit: editing,
             ),
-            _eventContent(),
+            editing ? _eventform() : _eventContent(),
           ],
         ),
       ),
-      bottomNavigationBar: _bottomNavigation(),
+      bottomNavigationBar: editing
+          ? BottomButtonWidget(onClick: toggleEdit)
+          : BottomNavigationWidget(
+              visualizeOption: showResponses,
+              editOption: toggleEdit,
+              addOption: showAddResponseDialog,
+            ),
     );
   }
 
@@ -62,12 +172,12 @@ class _ShowEventPageState extends State<ShowEventPage> {
           ),
           SizedBox(height: 8.0),
           Text(
-            'Data limite: 00/00/0000',
+            'Data limite: ${event.formatedDate}',
             style: _textTheme.subtitleStyle.copyWith(fontSize: 14),
           ),
           SizedBox(height: 4.0),
           Text(
-            'Respostas: 50',
+            'Respostas: ${event.responses.length}',
             style: _textTheme.subtitleStyle.copyWith(fontSize: 14),
           ),
         ],
@@ -75,30 +185,47 @@ class _ShowEventPageState extends State<ShowEventPage> {
     );
   }
 
-  Widget _bottomButton() {
-    return ElevatedButton(
-      onPressed: () {},
-      child: Text('Salvar alterações'),
-      style: _style.bottomButtonStyle,
-    );
-  }
-
-  Widget _bottomNavigation() {
-    return BottomNavigationBar(
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.group_outlined),
-          label: 'Visualizar',
+  Widget _eventform() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Form(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              minLines: 5,
+              maxLines: 5,
+              keyboardType: TextInputType.multiline,
+              decoration: InputDecoration(
+                labelText: 'Descrição',
+                hintText: 'Descreva o evento',
+              ),
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: 'Data',
+                hintText: 'Data limite para resposta',
+                suffixIcon: IconButton(onPressed: () {}, icon: Icon(Icons.date_range)),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: 'Texto confirmar',
+                hintText: 'Texto para confirmar presença',
+              ),
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: 'Texto cancelar',
+                hintText: 'Texto para cancelar presença',
+              ),
+            ),
+          ],
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.edit_outlined),
-          label: 'Editar',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.add),
-          label: 'Resposta',
-        ),
-      ],
+      ),
     );
   }
 }

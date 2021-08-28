@@ -5,10 +5,11 @@ class AppThemes {
   Color secondaryColor = Color(0XFF834790);
   TextTheme _defaulttextTheme = TextTheme();
 
-  ThemeData get lightTheme => ThemeData.light().copyWith(
+  ThemeData get lightTheme => ThemeData(
         primaryColor: primaryColor,
         accentColor: secondaryColor,
-        primaryColorLight: primaryColor,
+        primarySwatch: Colors.deepPurple,
+        brightness: Brightness.light,
         elevatedButtonTheme: _elevatedButtonThemeData,
         inputDecorationTheme: _inputDecorationTheme,
         appBarTheme: _appBarTheme,
@@ -36,10 +37,6 @@ class AppThemes {
         border: OutlineInputBorder(
           borderSide: BorderSide(color: secondaryColor),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: primaryColor),
-        ),
-        labelStyle: TextStyle(color: primaryColor),
       );
 
   BottomNavigationBarThemeData get _bottomNavigationTheme => BottomNavigationBarThemeData(

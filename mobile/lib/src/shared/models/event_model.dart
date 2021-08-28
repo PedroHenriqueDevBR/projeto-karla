@@ -39,7 +39,17 @@ class EventModel {
         password: data['password'],
       );
 
-  String get formatedDate => '${expirationDate.day}/${expirationDate.month}/${expirationDate.year}';
+  String get formatedDate =>
+      '${formatDateToShow(expirationDate.day)}/${formatDateToShow(expirationDate.month)}/${expirationDate.year}';
+
+  String formatDateToShow(int info) {
+    if (info < 10) return '0$info';
+    return '$info';
+  }
+
+  String get confirmTextFormated => confirmText != null ? confirmText! : 'Confirmado';
+
+  String get cancelTextFormated => cancelText != null ? cancelText! : 'Negado';
 
   static List<EventModel> fromResponseList(List<dynamic> list) {
     List<EventModel> events = [];

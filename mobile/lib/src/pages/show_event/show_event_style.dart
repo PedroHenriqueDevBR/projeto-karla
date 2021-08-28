@@ -17,4 +17,11 @@ class ShowEventStyle {
         borderRadius: BorderRadius.circular(50),
         color: _appThemes.primaryColor,
       );
+
+  BoxDecoration get bottomSheetStyle => BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(0),
+          topRight: Radius.circular(0),
+        ),
+      );
 }
