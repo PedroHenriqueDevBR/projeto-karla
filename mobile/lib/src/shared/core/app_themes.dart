@@ -5,13 +5,15 @@ class AppThemes {
   Color secondaryColor = Color(0XFF834790);
   TextTheme _defaulttextTheme = TextTheme();
 
-  ThemeData get lightTheme => ThemeData.dark().copyWith(
+  ThemeData get lightTheme => ThemeData.light().copyWith(
         primaryColor: primaryColor,
         accentColor: secondaryColor,
+        primaryColorLight: primaryColor,
         elevatedButtonTheme: _elevatedButtonThemeData,
         inputDecorationTheme: _inputDecorationTheme,
         appBarTheme: _appBarTheme,
         floatingActionButtonTheme: _fabTheme,
+        bottomNavigationBarTheme: _bottomNavigationTheme,
       );
 
   AppBarTheme get _appBarTheme => AppBarTheme(elevation: 0);
@@ -31,6 +33,20 @@ class AppThemes {
       );
 
   InputDecorationTheme get _inputDecorationTheme => InputDecorationTheme(
-        border: OutlineInputBorder(),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: secondaryColor),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: primaryColor),
+        ),
+        labelStyle: TextStyle(color: primaryColor),
+      );
+
+  BottomNavigationBarThemeData get _bottomNavigationTheme => BottomNavigationBarThemeData(
+        backgroundColor: secondaryColor,
+        elevation: 0,
+        showUnselectedLabels: true,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
       );
 }

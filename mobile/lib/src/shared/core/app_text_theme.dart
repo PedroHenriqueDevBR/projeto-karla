@@ -14,6 +14,6 @@ class AppTextTheme {
 
   TextStyle get subtitleStyle => GoogleFonts.openSans(
         fontSize: 12,
-        color: Colors.grey,
+        color: Colors.grey.shade700,
       );
 }

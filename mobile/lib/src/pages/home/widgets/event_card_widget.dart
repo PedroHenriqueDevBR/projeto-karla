@@ -3,18 +3,16 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
+import 'package:projeto_karla/src/shared/core/assets.dart';
 import 'package:projeto_karla/src/shared/models/event_model.dart';
 
 class EventCardWidget extends StatelessWidget {
+  final EventModel event;
   final _radius = 8.0;
-  EventModel event;
-  final _defaultImage =
-      'https://images.pexels.com/photos/1263986/pexels-photo-1263986.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260';
+  final _assets = AppAssets();
+  final _textTheme = AppTextTheme();
 
-  EventCardWidget({
-    required this.event,
-  });
-  AppTextTheme _textTheme = AppTextTheme();
+  EventCardWidget({required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +28,7 @@ class EventCardWidget extends StatelessWidget {
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     image: NetworkImage(
-                      event.background ?? _defaultImage,
+                      event.background ?? _assets.defaultImage,
                     ),
                   ),
                   borderRadius: BorderRadius.only(

@@ -35,13 +35,14 @@ class _HomePageState extends State<HomePage> {
         title: Text('Karla App'),
         actions: [
           TextButton(
-              onPressed: () {},
-              child: Text(
-                'Sair',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              )),
+            onPressed: () {},
+            child: Text(
+              'Sair',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
         ],
       ),
       body: ListView.builder(
