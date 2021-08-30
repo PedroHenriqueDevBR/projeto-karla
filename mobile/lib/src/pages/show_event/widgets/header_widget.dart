@@ -3,6 +3,7 @@ import 'package:projeto_karla/src/pages/show_event/show_event_style.dart';
 import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
 import 'package:projeto_karla/src/shared/core/assets.dart';
 import 'package:projeto_karla/src/shared/models/event_model.dart';
+import 'package:asuka/asuka.dart' as asuka;
 
 class HeaderWidget extends StatelessWidget {
   final EventModel event;
@@ -28,7 +29,6 @@ class HeaderWidget extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(12.0),
             width: size.width,
-            color: edit ? Theme.of(context).scaffoldBackgroundColor : null,
             child: this.edit ? _inputTitle(context, size) : _information(),
           ),
         ),
@@ -73,14 +73,46 @@ class HeaderWidget extends StatelessWidget {
   }
 
   Widget _inputTitle(BuildContext context, Size size) {
-    return TextFormField(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (value) {
-        if (value == null || value.isEmpty) return 'Campo obrigatório';
-      },
-      decoration: InputDecoration(
-        labelText: 'Titulo',
-        hintText: 'Digite o titulo do evento',
+    return Container(
+      width: double.maxFinite,
+      height: 175,
+      color: Colors.transparent,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            child: Wrap(
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  child: IconButton(
+                    onPressed: showChangeImageDialog,
+                    icon: Icon(
+                      Icons.image_outlined,
+                      color: Colors.white,
+                    ),
+                  ),
+                  decoration: _style.iconButtonStyle,
+                ),
+              ],
+            ),
+          ),
+          TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (value) {
+              if (value == null || value.isEmpty) return 'Campo obrigatório';
+            },
+            decoration: InputDecoration(
+              labelText: 'Titulo',
+              hintText: 'Digite o titulo do evento',
+              filled: true,
+              fillColor: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -100,10 +132,59 @@ class HeaderWidget extends StatelessWidget {
           Container(
             child: IconButton(
               onPressed: () {},
-              icon: Icon(Icons.share),
+              icon: Icon(
+                Icons.share,
+                color: Colors.white,
+              ),
             ),
+            decoration: _style.iconButtonStyle,
           ),
         ],
+      ),
+    );
+  }
+
+  void showChangeImageDialog() {
+    asuka.showDialog(
+      builder: (dialogContext) => AlertDialog(
+        title: Text('Capa do evento'),
+        content: Container(
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'URL',
+                  hintText: 'Digite a url da imagem',
+                ),
+              ),
+              SizedBox(height: 80.0),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Salvar'),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(dialogContext),
+                      child: Text(
+                        'Cancelar resposta',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

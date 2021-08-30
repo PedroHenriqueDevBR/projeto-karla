@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:asuka/asuka.dart' as asuka;
+import 'package:flutter/material.dart';
 
 class EventFormWidget extends StatelessWidget {
+  GlobalKey<FormState> formKey;
   TextEditingController txtDescription;
   TextEditingController txtDate;
   TextEditingController txtConfirmText;
@@ -9,6 +10,7 @@ class EventFormWidget extends StatelessWidget {
 
   EventFormWidget({
     Key? key,
+    required this.formKey,
     required this.txtDescription,
     required this.txtDate,
     required this.txtConfirmText,
@@ -20,6 +22,7 @@ class EventFormWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
+        key: formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

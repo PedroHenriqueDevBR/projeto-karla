@@ -5,13 +5,10 @@ import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
 import 'package:projeto_karla/src/shared/models/event_model.dart';
 import 'package:projeto_karla/src/shared/models/response_model.dart';
 
-// Include generated file
 part 'show_event_store.g.dart';
 
-// This is the class used by rest of your codebase
 class ShowEventStore = _ShowEventStore with _$ShowEventStore;
 
-// The store-class
 abstract class _ShowEventStore with Store {
   final textTheme = AppTextTheme();
   final style = ShowEventStyle();
