@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:projeto_karla/src/shared/exceptions/http_response_exception.dart';
 import './client_http_interface.dart';
 import './http_response_model.dart';
 
 class DioClientService implements IClientHTTP {
-  String _getBaseUrl(String path) => 'http://127.0.0.1:8000/api/$path';
+  String _getBaseUrl(String path) => 'http://192.168.2.3:8000/api/$path';
 
   Map<String, String> _setAuthorization({String? key}) {
     Map<String, String> map = {};
@@ -43,9 +44,25 @@ class DioClientService implements IClientHTTP {
         data: response.data,
         headers: response.headers.map,
       );
+    } on DioError catch (error) {
+      if (error.message.contains('Connection refused')) {
+        throw HttpResponseException(
+          response: HttpResponseModel(
+            statusCode: 503,
+            data: {},
+            headers: {},
+          ),
+        );
+      }
+      throw HttpResponseException(
+        response: HttpResponseModel(
+          statusCode: 400,
+          data: {},
+          headers: {},
+        ),
+      );
     } catch (error) {
-      print(error);
-      throw HttpException('POST: Execute error');
+      throw error;
     }
   }
 

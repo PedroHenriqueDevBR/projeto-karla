@@ -27,4 +27,11 @@ class UserModel {
       'password': this.password,
     };
   }
+
+  Map<String, dynamic> toLoginMap() {
+    return {
+      'username': this.username,
+      'password': this.password,
+    };
+  }
 }

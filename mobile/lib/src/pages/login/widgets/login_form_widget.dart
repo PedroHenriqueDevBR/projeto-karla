@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+
 import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
 
 class LoginFormWidget extends StatefulWidget {
+  VoidCallback onConfirmButtonPresset;
   VoidCallback onBottomButtomPresset;
+  TextEditingController txtLogin;
+  TextEditingController txtPassword;
 
   LoginFormWidget({
+    Key? key,
+    required this.onConfirmButtonPresset,
     required this.onBottomButtomPresset,
-  });
+    required this.txtLogin,
+    required this.txtPassword,
+  }) : super(key: key);
 
   @override
   _LoginFormWidgetState createState() => _LoginFormWidgetState();
@@ -43,6 +51,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             ),
             SizedBox(height: 16.0),
             TextFormField(
+              controller: widget.txtLogin,
               decoration: InputDecoration(
                 labelText: 'Username',
                 hintText: 'Digite o seu nome de usuário',
@@ -50,6 +59,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             ),
             SizedBox(height: 16.0),
             TextFormField(
+              controller: widget.txtPassword,
               decoration: InputDecoration(
                 labelText: 'Senha',
                 hintText: 'Digite a sua senha',
@@ -59,7 +69,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             Row(children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: widget.onConfirmButtonPresset,
                   child: Text('Entrar'),
                 ),
               ),

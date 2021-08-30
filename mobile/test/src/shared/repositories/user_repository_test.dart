@@ -2,15 +2,22 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:projeto_karla/src/shared/exceptions/invalid_data_exception.dart';
 import 'package:projeto_karla/src/shared/models/user_model.dart';
 import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
+import 'package:projeto_karla/src/shared/services/app_data_interface.dart';
 import 'package:projeto_karla/src/shared/services/client_http_interface.dart';
 import 'package:projeto_karla/src/shared/services/http_response_model.dart';
 import 'package:mocktail/mocktail.dart';
 
 class HttpMock extends Mock implements IClientHTTP {}
 
+class JwtMock extends Mock implements IAppData {}
+
 main() {
   final _client = HttpMock();
-  UserRepository _userRepository = UserRepository(client: _client);
+  final _appData = JwtMock();
+  UserRepository _userRepository = UserRepository(
+    client: _client,
+    appData: _appData,
+  );
 
   test('Should be error on invalid data', () async {
     final user = UserModel(name: 'a', username: 'a', password: 'a');
@@ -38,9 +45,8 @@ main() {
           data: loginResponse,
           headers: {},
         ));
-    final response = await _userRepository.loginAndResponseJWTKey(user);
-    expect(response, isA<String>());
-    expect(response, equals(loginResponse['access']));
+    when(() => _appData.setJWT(any())).thenAnswer((_) async {});
+    await _userRepository.loginUser(user);
   });
 }
 

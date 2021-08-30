@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:projeto_karla/src/shared/services/app_data_interface.dart';
 import '../exceptions/http_response_exception.dart';
 import '../exceptions/invalid_data_exception.dart';
 import '../models/user_model.dart';
@@ -7,20 +6,24 @@ import '../services/client_http_interface.dart';
 
 class UserRepository {
   IClientHTTP _client;
+  IAppData _appData;
 
-  UserRepository({required IClientHTTP client}) : this._client = client;
+  UserRepository({required IClientHTTP client, required IAppData appData})
+      : this._client = client,
+        this._appData = appData;
 
-  Future<String> loginAndResponseJWTKey(UserModel user) async {
+  Future<bool> loginUser(UserModel user) async {
     final errors = _validToLoginOrErrors(user);
     if (errors.isNotEmpty) throw InvalidDataException(errors: errors);
     String url = 'token/';
     try {
-      final response = await _client.post(url, user.toMap());
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        return response.data['access'];
+      final response = await _client.post(url, user.toLoginMap());
+      if (response.statusCode == 200) {
+        _appData.setJWT(response.data['access']);
+        return true;
       }
-      throw HttpException('Status: ${response.statusCode}');
-    } catch (error) {
+      throw HttpResponseException(response: response);
+    } on HttpResponseException catch (error) {
       throw error;
     }
   }

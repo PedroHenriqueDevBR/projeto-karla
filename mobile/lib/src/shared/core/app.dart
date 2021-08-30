@@ -25,6 +25,12 @@ class App extends StatelessWidget {
       navigatorObservers: [
         asuka.asukaHeroController //if u don`t add this Hero will not work
       ],
+      initialRoute: '',
+      routes: {
+        '': (context) => LoginPage(),
+        'home': (context) => HomePage(),
+        'event': (context) => ShowEventPage(),
+      },
       title: 'Projeto Karla',
       theme: _appThemes.lightTheme,
       home: ShowEventPage(),

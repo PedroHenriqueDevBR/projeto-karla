@@ -28,7 +28,7 @@ main() {
     EventModel event = EventModel(
       title: 'Titulo',
       description: '',
-      expirationDate: DateTime.parse('2021-08-25'),
+      expirationDate: DateTime.parse('2021-10-25'),
     );
     final response = await _repository.addEvent(event);
     expect(response, isA<EventModel>());
@@ -58,7 +58,7 @@ main() {
       id: 6,
       title: 'Updated again',
       description: 'text',
-      expirationDate: DateTime.parse('2021-08-26'),
+      expirationDate: DateTime.parse('2021-10-26'),
       confirmText: 'Posso ir',
     );
     await _repository.updateEvent(event);
