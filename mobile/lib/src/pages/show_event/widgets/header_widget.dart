@@ -23,15 +23,20 @@ class HeaderWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
-        _image(),
-        _internalShadow(
-          child: _content(size: size, context: context),
+        _imageHeader(),
+        _internalGradient(
+          child: Container(
+            padding: const EdgeInsets.all(12.0),
+            width: size.width,
+            color: edit ? Theme.of(context).scaffoldBackgroundColor : null,
+            child: this.edit ? _inputTitle(context, size) : _information(),
+          ),
         ),
       ],
     );
   }
 
-  Widget _image() {
+  Widget _imageHeader() {
     return Container(
       width: double.maxFinite,
       height: 220,
@@ -46,7 +51,7 @@ class HeaderWidget extends StatelessWidget {
     );
   }
 
-  Widget _internalShadow({required Widget child}) {
+  Widget _internalGradient({required Widget child}) {
     return Container(
       height: 220,
       decoration: BoxDecoration(
@@ -67,17 +72,12 @@ class HeaderWidget extends StatelessWidget {
     );
   }
 
-  Widget _content({required Size size, required BuildContext context}) {
-    return Container(
-      padding: const EdgeInsets.all(12.0),
-      width: size.width,
-      color: edit ? Theme.of(context).cardColor : null,
-      child: this.edit ? _inputTitle(context, size) : _information(),
-    );
-  }
-
   Widget _inputTitle(BuildContext context, Size size) {
     return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Campo obrigatório';
+      },
       decoration: InputDecoration(
         labelText: 'Titulo',
         hintText: 'Digite o titulo do evento',
@@ -86,25 +86,25 @@ class HeaderWidget extends StatelessWidget {
   }
 
   Widget _information() {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Text(
-            event.title.isNotEmpty ? event.title : 'Titulo do evento',
-            style: _textTheme.titleStyle.copyWith(color: Colors.white),
+    return Container(
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Text(
+              event.title.isNotEmpty ? event.title : 'Titulo do evento',
+              style: _textTheme.titleStyle.copyWith(color: Colors.white),
+            ),
           ),
-        ),
-        Container(
-          child: IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.share),
-            color: Colors.white,
+          Container(
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.share),
+            ),
           ),
-          decoration: _style.iconButtonStyle,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
