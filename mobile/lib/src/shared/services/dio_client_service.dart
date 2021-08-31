@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:projeto_karla/src/shared/exceptions/http_response_exception.dart';
-import './client_http_interface.dart';
 import './http_response_model.dart';
+import '../exceptions/http_response_exception.dart';
+import '../interfaces/client_http_interface.dart';
 
 class DioClientService implements IClientHTTP {
   String _getBaseUrl(String path) => 'http://192.168.2.3:8000/api/$path';

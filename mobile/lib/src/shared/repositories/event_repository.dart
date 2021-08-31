@@ -1,6 +1,6 @@
-import '../services/app_data_interface.dart';
+import '../interfaces/app_data_interface.dart';
+import '../interfaces/client_http_interface.dart';
 import '../models/event_model.dart';
-import '../services/client_http_interface.dart';
 import '../exceptions/http_response_exception.dart';
 import '../exceptions/invalid_data_exception.dart';
 

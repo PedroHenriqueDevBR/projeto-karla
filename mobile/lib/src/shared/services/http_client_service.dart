@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:http/http.dart';
-import 'package:projeto_karla/src/shared/exceptions/http_response_exception.dart';
-import 'package:projeto_karla/src/shared/services/client_http_interface.dart';
-import 'package:projeto_karla/src/shared/services/http_response_model.dart';
 import 'package:http/http.dart' as http;
+import './http_response_model.dart';
+import '../exceptions/http_response_exception.dart';
+import '../interfaces/client_http_interface.dart';
 
 class HttpClientService implements IClientHTTP {
   Uri _getBaseUrl(String path) => Uri.parse('http://192.168.2.3:8000/api/$path');

@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:projeto_karla/src/shared/exceptions/invalid_data_exception.dart';
+import 'package:projeto_karla/src/shared/interfaces/app_data_interface.dart';
+import 'package:projeto_karla/src/shared/interfaces/client_http_interface.dart';
 import 'package:projeto_karla/src/shared/models/user_model.dart';
 import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
-import 'package:projeto_karla/src/shared/services/app_data_interface.dart';
-import 'package:projeto_karla/src/shared/services/client_http_interface.dart';
 import 'package:projeto_karla/src/shared/services/http_response_model.dart';
 import 'package:mocktail/mocktail.dart';
 

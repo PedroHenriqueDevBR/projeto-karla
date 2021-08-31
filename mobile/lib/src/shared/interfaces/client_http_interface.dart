@@ -1,4 +1,4 @@
-import './http_response_model.dart';
+import '../services/http_response_model.dart';
 
 abstract class IClientHTTP {
   Future<HttpResponseModel> get(String url, {String? jwtKey});

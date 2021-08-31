@@ -1,6 +1,6 @@
-import 'package:projeto_karla/src/shared/exceptions/invalid_data_exception.dart';
-import 'package:projeto_karla/src/shared/services/app_data_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../exceptions/invalid_data_exception.dart';
+import '../interfaces/app_data_interface.dart';
 
 class AppPreferenceService implements IAppData {
   final key = 'jwt';
