@@ -26,11 +26,10 @@ class HttpClientService implements IClientHTTP {
       Response response = await http.get(uri, headers: headers);
       return HttpResponseModel(
         statusCode: response.statusCode,
-        data: jsonDecode(response.body),
+        data: jsonDecode(response.body.isNotEmpty ? response.body : '{}'),
         headers: response.headers,
       );
     } catch (error) {
-      print(error);
       throw HttpResponseException(
         response: HttpResponseModel(
           statusCode: 500,
@@ -49,11 +48,10 @@ class HttpClientService implements IClientHTTP {
       Response response = await http.post(uri, body: data, headers: headers);
       return HttpResponseModel(
         statusCode: response.statusCode,
-        data: jsonDecode(response.body),
+        data: jsonDecode(response.body.isNotEmpty ? response.body : '{}'),
         headers: response.headers,
       );
     } catch (error) {
-      print(error);
       throw error;
     }
   }
@@ -67,11 +65,10 @@ class HttpClientService implements IClientHTTP {
       Response response = await http.put(uri, body: data, headers: headers);
       return HttpResponseModel(
         statusCode: response.statusCode,
-        data: jsonDecode(response.body),
+        data: jsonDecode(response.body.isNotEmpty ? response.body : '{}'),
         headers: response.headers,
       );
     } catch (error) {
-      print(error);
       throw error;
     }
   }
@@ -85,11 +82,10 @@ class HttpClientService implements IClientHTTP {
       Response response = await http.delete(uri, headers: headers);
       return HttpResponseModel(
         statusCode: response.statusCode,
-        data: response.body,
+        data: jsonDecode(response.body.isNotEmpty ? response.body : '{}'),
         headers: response.headers,
       );
     } catch (error) {
-      print(error);
       throw error;
     }
   }

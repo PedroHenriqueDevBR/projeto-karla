@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:projeto_karla/src/shared/services/app_data_interface.dart';
+import 'package:projeto_karla/src/shared/services/http_response_model.dart';
 import '../exceptions/http_response_exception.dart';
 import '../exceptions/invalid_data_exception.dart';
 import '../models/user_model.dart';
@@ -23,8 +26,23 @@ class UserRepository {
         return true;
       }
       throw HttpResponseException(response: response);
-    } on HttpResponseException catch (error) {
-      throw error;
+    } on SocketException catch (error) {
+      if (error.osError!.message.contains('Connection refused')) {
+        return throw HttpResponseException(
+          response: HttpResponseModel(
+            statusCode: 503,
+            data: {},
+            headers: {},
+          ),
+        );
+      }
+      return throw HttpResponseException(
+        response: HttpResponseModel(
+          statusCode: 400,
+          data: {},
+          headers: {},
+        ),
+      );
     }
   }
 
@@ -38,8 +56,23 @@ class UserRepository {
         throw HttpResponseException(response: response);
       }
       return;
-    } catch (error) {
-      throw error;
+    } on SocketException catch (error) {
+      if (error.osError!.message.contains('Connection refused')) {
+        throw HttpResponseException(
+          response: HttpResponseModel(
+            statusCode: 503,
+            data: {},
+            headers: {},
+          ),
+        );
+      }
+      throw HttpResponseException(
+        response: HttpResponseModel(
+          statusCode: 400,
+          data: {},
+          headers: {},
+        ),
+      );
     }
   }
 
