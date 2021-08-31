@@ -29,6 +29,15 @@ abstract class _RegisterUserStore with Store {
   @observable
   String txtRepeatPassword = '';
 
+  @observable
+  bool hidePassword = true;
+
+  @observable
+  bool hiderepeatPassword = true;
+
+  @observable
+  bool isLoading = false;
+
   @action
   void setName(String value) => txtName = value;
 
@@ -41,7 +50,18 @@ abstract class _RegisterUserStore with Store {
   @action
   void setRepeatPassword(String value) => txtRepeatPassword = value;
 
+  @action
+  void toggleShowPassword() => hidePassword = !hidePassword;
+
+  @action
+  void toggleRepeatShowPasswrd() => hiderepeatPassword = !hiderepeatPassword;
+
+  @action
+  void setLoading(bool value) => isLoading = value;
+
   Future<void> onSave(BuildContext context) async {
+    setLoading(true);
+    await Future.delayed(Duration(seconds: 2));
     if (userIsValidToRegister()) {
       final user = UserModel(
         name: txtName,
@@ -60,12 +80,13 @@ abstract class _RegisterUserStore with Store {
         } else {
           asuka.showSnackBar(asuka.AsukaSnackbar.message('Username já registrado'));
         }
+      } finally {
+        setLoading(false);
       }
     }
   }
 
   bool userIsValidToRegister() {
-    List<String> errors = [];
     if (txtName.length < 3) {
       asuka.showSnackBar(asuka.AsukaSnackbar.message('O nome precisa ter pelo menos 3 caracteres'));
       return false;
@@ -79,6 +100,7 @@ abstract class _RegisterUserStore with Store {
     return true;
   }
 
+  @computed
   bool get formIsValid {
     return txtName.length >= 3 &&
         txtUsername.length >= 5 &&

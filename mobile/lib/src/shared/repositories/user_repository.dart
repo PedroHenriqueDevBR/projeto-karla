@@ -14,6 +14,16 @@ class UserRepository {
       : this._client = client,
         this._appData = appData;
 
+  Future<bool> userIsLogged() async {
+    try {
+      String jwt = await _appData.getJWT();
+      if (jwt.isNotEmpty) return true;
+    } on InvalidDataException catch (_) {
+      return false;
+    }
+    return false;
+  }
+
   Future<bool> loginUser(UserModel user) async {
     final errors = _validToLoginOrErrors(user);
     if (errors.isNotEmpty) throw InvalidDataException(errors: errors);

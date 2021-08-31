@@ -8,6 +8,7 @@ import 'package:projeto_karla/src/pages/show_event/widgets/event_form_widget.dar
 import 'package:projeto_karla/src/pages/show_event/widgets/header_widget.dart';
 import 'package:projeto_karla/src/shared/models/event_model.dart';
 
+// ignore: must_be_immutable
 class ShowEventPage extends StatefulWidget {
   EventModel? eventModel;
   ShowEventPage({this.eventModel});

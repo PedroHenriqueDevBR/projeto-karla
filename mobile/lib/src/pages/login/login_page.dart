@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_karla/src/pages/login/login_controller.dart';
-import 'package:projeto_karla/src/pages/login/widgets/login_form_widget.dart';
-import 'package:projeto_karla/src/pages/register_user/register_user_page.dart';
-import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
-import 'package:projeto_karla/src/shared/services/app_preferences_service.dart';
-import 'package:projeto_karla/src/shared/services/http_client_service.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'login_style.dart';
+import 'stores/login_store.dart';
+import '../../shared/core/app_text_theme.dart';
+import '../../shared/repositories/user_repository.dart';
+import '../../shared/services/app_preferences_service.dart';
+import '../../shared/services/http_client_service.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -12,40 +13,114 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late LoginController _controller;
+  late LoginStore _store;
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  AppTextTheme _textTheme = AppTextTheme();
+  LoginStyle _style = LoginStyle();
 
   @override
   void initState() {
-    _controller = LoginController(
+    _store = LoginStore(
       repository: UserRepository(client: HttpClientService(), appData: AppPreferenceService()),
     );
+    _store.verifyLoggedUser(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Container(
-              color: Theme.of(context).accentColor,
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: LoginFormWidget(
-                txtLogin: _controller.txtLogin,
-                txtPassword: _controller.txtPassword,
-                onConfirmButtonPresset: () {
-                  _controller.loginUser(context: context);
-                },
-                onBottomButtomPresset: () {
-                  _controller.goRegisterUserPage(context);
-                },
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: _style.backgroundContainer,
+        child: SingleChildScrollView(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Center(
+              child: Wrap(
+                children: [
+                  Card(
+                    margin: const EdgeInsets.all(32.0),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
+                      child: _formLogin(),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
+
+  Widget _formLogin() => Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Text(
+              'Login',
+              style: _textTheme.titleStyle,
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              onChanged: (value) => _store.setLogin(value),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: (value) {
+                if (value == null || value.isEmpty) return 'Campo obrigatório';
+              },
+              textInputAction: TextInputAction.next,
+              decoration: InputDecoration(
+                labelText: 'Username',
+                hintText: 'Digite o seu nome de usuário',
+              ),
+            ),
+            SizedBox(height: 16.0),
+            Observer(
+              builder: (context) => TextFormField(
+                onChanged: (value) => _store.setPassword(value),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                textInputAction: TextInputAction.done,
+                obscureText: _store.hidePassword,
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'Campo obrigatório';
+                },
+                decoration: InputDecoration(
+                  labelText: 'Senha',
+                  hintText: 'Digite a sua senha',
+                  suffixIcon: IconButton(
+                    onPressed: () => _store.toggleShowPasswrd(),
+                    icon: Icon(_store.hidePassword ? Icons.visibility : Icons.visibility_off),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            Row(children: [
+              Expanded(
+                child: Observer(
+                  builder: (_) => ElevatedButton(
+                    onPressed:
+                        _store.formIsValid && !_store.isLoading ? () => _store.loginUser(context: context) : null,
+                    child: Text(_store.isLoading ? 'Carregando...' : 'Entrar'),
+                  ),
+                ),
+              ),
+            ]),
+            SizedBox(height: 16.0),
+            Observer(
+              builder: (context) => TextButton(
+                onPressed: !_store.isLoading ? () => _store.goRegisterUserPage(context) : null,
+                child: Text(
+                  'Ainda não possui cadastro?\nClique aqui e cadastre-se',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 }
