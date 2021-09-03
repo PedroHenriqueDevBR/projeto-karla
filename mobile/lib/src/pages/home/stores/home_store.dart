@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import 'package:projeto_karla/src/pages/show_event/show_event_page.dart';
 import 'package:projeto_karla/src/shared/exceptions/http_response_exception.dart';
 import 'package:projeto_karla/src/shared/models/event_model.dart';
 import 'package:projeto_karla/src/shared/repositories/event_repository.dart';
@@ -48,6 +49,16 @@ abstract class _HomeStore with Store {
     }
   }
 
+  @action
+  Future<void> addOrUpdateEvent(EventModel event) async {
+    if (event.id != null) {
+      int index = events.indexWhere((element) => element.id == event.id);
+      if (index != -1) events[index] = event;
+      return;
+    }
+    getEvents();
+  }
+
   Future<void> logout() async {
     await userRepository.logout();
     Navigator.popAndPushNamed(context, '');
@@ -56,5 +67,22 @@ abstract class _HomeStore with Store {
   Future<void> refreshData() async {
     await Future.delayed(Duration(seconds: 2));
     getEvents();
+  }
+
+  void goToShowEventPage(EventModel event) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ShowEventPage(eventModel: event),
+      ),
+    ).then((value) {
+      if (value != null) {
+        if (value.runtimeType == EventModel) {
+          EventModel event = value as EventModel;
+          addOrUpdateEvent(event);
+        }
+        getEvents();
+      }
+    });
   }
 }

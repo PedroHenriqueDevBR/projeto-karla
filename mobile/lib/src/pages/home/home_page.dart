@@ -6,6 +6,7 @@ import 'package:projeto_karla/src/pages/home/home_style.dart';
 import 'package:projeto_karla/src/pages/home/stores/home_store.dart';
 import 'package:projeto_karla/src/pages/home/widgets/event_card_widget.dart';
 import 'package:projeto_karla/src/shared/core/assets.dart';
+import 'package:projeto_karla/src/shared/models/event_model.dart';
 import 'package:projeto_karla/src/shared/repositories/event_repository.dart';
 import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
 import 'package:projeto_karla/src/shared/services/app_preferences_service.dart';
@@ -106,9 +107,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 builder: (_) => ListView.builder(
                   itemCount: _store.events.length,
                   itemBuilder: (_, index) {
+                    EventModel event = _store.events[index];
                     return Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: EventCardWidget(event: _store.events[index]),
+                      child: EventCardWidget(
+                        event: event,
+                        onClick: () => _store.goToShowEventPage(event),
+                      ),
                     );
                   },
                 ),
