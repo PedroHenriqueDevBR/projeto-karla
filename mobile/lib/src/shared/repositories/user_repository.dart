@@ -55,6 +55,14 @@ class UserRepository {
     }
   }
 
+  Future<void> logout() async {
+    try {
+      await _appData.setJWT('');
+    } catch (error) {
+      print('Logout error');
+    }
+  }
+
   Future<void> registerUser(UserModel user) async {
     final errors = _validToRegisterOrErrors(user);
     if (errors.isNotEmpty) throw InvalidDataException(errors: errors);

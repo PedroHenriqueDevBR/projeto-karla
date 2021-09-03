@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppThemes {
-  Color primaryColor = Color(0XFFD81B60);
-  Color secondaryColor = Color(0XFF834790);
+  Color primaryColor = Color(0XFF6411AD);
+  Color secondaryColor = Color(0XFFFD2D6A);
   TextTheme _defaulttextTheme = TextTheme();
 
   ThemeData get lightTheme => ThemeData(
@@ -17,7 +17,10 @@ class AppThemes {
         bottomNavigationBarTheme: _bottomNavigationTheme,
       );
 
-  AppBarTheme get _appBarTheme => AppBarTheme(elevation: 0);
+  AppBarTheme get _appBarTheme => AppBarTheme(
+        elevation: 0,
+        brightness: Brightness.dark,
+      );
 
   FloatingActionButtonThemeData get _fabTheme => FloatingActionButtonThemeData(
         backgroundColor: secondaryColor,

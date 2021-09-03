@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:projeto_karla/src/shared/services/http_response_model.dart';
+
 import '../interfaces/app_data_interface.dart';
 import '../interfaces/client_http_interface.dart';
 import '../models/event_model.dart';
@@ -23,8 +27,23 @@ class EventRepository {
         return EventModel.fromRestAPI(response.data);
       }
       throw HttpResponseException(response: response);
-    } catch (error) {
-      throw error;
+    } on SocketException catch (error) {
+      if (error.osError!.message.contains('Connection refused')) {
+        return throw HttpResponseException(
+          response: HttpResponseModel(
+            statusCode: 503,
+            data: {},
+            headers: {},
+          ),
+        );
+      }
+      return throw HttpResponseException(
+        response: HttpResponseModel(
+          statusCode: 400,
+          data: {},
+          headers: {},
+        ),
+      );
     }
   }
 
@@ -37,8 +56,23 @@ class EventRepository {
         return EventModel.fromResponseList(response.data);
       }
       throw HttpResponseException(response: response);
-    } catch (error) {
-      throw error;
+    } on SocketException catch (error) {
+      if (error.osError!.message.contains('Connection refused')) {
+        return throw HttpResponseException(
+          response: HttpResponseModel(
+            statusCode: 503,
+            data: {},
+            headers: {},
+          ),
+        );
+      }
+      return throw HttpResponseException(
+        response: HttpResponseModel(
+          statusCode: 400,
+          data: {},
+          headers: {},
+        ),
+      );
     }
   }
 

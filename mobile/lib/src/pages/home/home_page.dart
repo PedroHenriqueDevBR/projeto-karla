@@ -1,32 +1,56 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
+import 'package:projeto_karla/src/pages/home/home_style.dart';
+import 'package:projeto_karla/src/pages/home/stores/home_store.dart';
 import 'package:projeto_karla/src/pages/home/widgets/event_card_widget.dart';
-import 'package:projeto_karla/src/shared/models/event_model.dart';
+import 'package:projeto_karla/src/shared/core/assets.dart';
+import 'package:projeto_karla/src/shared/repositories/event_repository.dart';
+import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
+import 'package:projeto_karla/src/shared/services/app_preferences_service.dart';
+import 'package:projeto_karla/src/shared/services/http_client_service.dart';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final events = [
-    EventModel(
-      title: 'Evento 01',
-      description: 'Uma descrição qualquer do evento só para teste mesmo',
-      background:
-          'https://images.pexels.com/photos/1000445/pexels-photo-1000445.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
-      expirationDate: DateTime.now(),
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  HomeStore _store = HomeStore(
+    userRepository: UserRepository(
+      client: HttpClientService(),
+      appData: AppPreferenceService(),
     ),
-    EventModel(
-      title: 'Evento 02',
-      description: 'Uma descrição qualquer do evento só para teste mesmo',
-      expirationDate: DateTime.now(),
+    repository: EventRepository(
+      client: HttpClientService(),
+      appData: AppPreferenceService(),
     ),
-    EventModel(
-      title: 'Evento 03',
-      description: 'Uma descrição qualquer do evento só para teste mesmo',
-      expirationDate: DateTime.now(),
-    ),
-  ];
+  );
+  AppAssets _assets = AppAssets();
+  HomeStyle _style = HomeStyle();
+  late ReactionDisposer _disposer;
+
+  @override
+  void initState() {
+    super.initState();
+    _store.getEvents();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _disposer = reaction(
+      (_) => _store.events.length,
+      (_) => setState(() {}),
+    );
+  }
+
+  @override
+  void dispose() {
+    _disposer();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,24 +59,58 @@ class _HomePageState extends State<HomePage> {
         title: Text('Karla App'),
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () => _store.logout(context),
             child: Text(
               'Sair',
-              style: TextStyle(
-                color: Colors.white,
-              ),
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: events.length,
-        itemBuilder: (_, index) {
-          return Padding(
-            padding: EdgeInsets.all(8.0),
-            child: EventCardWidget(event: events[index]),
-          );
-        },
+      body: RefreshIndicator(
+        onRefresh: _store.refreshData,
+        child: _store.events.length == 0
+            ? Container(
+                width: double.maxFinite,
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AnimatedTextKit(
+                      animatedTexts: [
+                        TypewriterAnimatedText(
+                          'Nenhum evento para ser exibido',
+                          textStyle: _style.textStyleNothingToShow,
+                          speed: Duration(milliseconds: 100),
+                        ),
+                        TypewriterAnimatedText(
+                          '+ Evento para criar um novo',
+                          textStyle: _style.textStyleNothingToShow,
+                          speed: Duration(milliseconds: 100),
+                        ),
+                      ],
+                      repeatForever: true,
+                    ),
+                    SizedBox(height: 16.0),
+                    OutlinedButton(
+                      onPressed: _store.refreshData,
+                      child: Text('Recarregar página'),
+                      style: _style.btnRefreshDataStyle,
+                    ),
+                  ],
+                ),
+              )
+            : Observer(
+                builder: (_) => ListView.builder(
+                  itemCount: _store.events.length,
+                  itemBuilder: (_, index) {
+                    return Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: EventCardWidget(event: _store.events[index]),
+                    );
+                  },
+                ),
+              ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         icon: Icon(Icons.add),

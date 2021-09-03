@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:projeto_karla/src/pages/home/home_style.dart';
 
 import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
 import 'package:projeto_karla/src/shared/core/assets.dart';
@@ -11,6 +12,7 @@ class EventCardWidget extends StatelessWidget {
   final _radius = 8.0;
   final _assets = AppAssets();
   final _textTheme = AppTextTheme();
+  final _style = HomeStyle();
 
   EventCardWidget({required this.event});
 
@@ -24,17 +26,9 @@ class EventCardWidget extends StatelessWidget {
               Container(
                 width: double.maxFinite,
                 height: 120,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      event.background ?? _assets.defaultImage,
-                    ),
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(_radius),
-                    topRight: Radius.circular(_radius),
-                  ),
+                decoration: _style.cardHeaderDecoration(
+                  image: event.background ?? _assets.defaultImage,
+                  isNetwork: event.background != null,
                 ),
               ),
               Container(
@@ -62,8 +56,9 @@ class EventCardWidget extends StatelessWidget {
             ],
           ),
           Container(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   event.description,
