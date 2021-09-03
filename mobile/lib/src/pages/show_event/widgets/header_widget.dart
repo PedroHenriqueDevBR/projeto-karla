@@ -40,13 +40,9 @@ class HeaderWidget extends StatelessWidget {
     return Container(
       width: double.maxFinite,
       height: 220,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: NetworkImage(
-            event.background ?? _assets.defaultImage,
-          ),
-        ),
+      decoration: _style.cardHeaderDecoration(
+        image: event.background ?? _assets.defaultImage,
+        isNetwork: event.background != null,
       ),
     );
   }

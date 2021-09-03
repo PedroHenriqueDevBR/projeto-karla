@@ -24,4 +24,18 @@ class ShowEventStyle {
           topRight: Radius.circular(0),
         ),
       );
+
+  BoxDecoration cardHeaderDecoration({required String image, bool isNetwork = false}) {
+    return BoxDecoration(
+      image: isNetwork
+          ? DecorationImage(
+              fit: BoxFit.cover,
+              image: NetworkImage(image),
+            )
+          : DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage(image),
+            ),
+    );
+  }
 }

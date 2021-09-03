@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 class AppThemes {
   Color primaryColor = Color(0XFF6411AD);
   Color secondaryColor = Color(0XFFFD2D6A);
-  TextTheme _defaulttextTheme = TextTheme();
 
   ThemeData get lightTheme => ThemeData(
         primaryColor: primaryColor,
         accentColor: secondaryColor,
         primarySwatch: Colors.deepPurple,
         brightness: Brightness.light,
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          },
+        ),
         elevatedButtonTheme: _elevatedButtonThemeData,
         inputDecorationTheme: _inputDecorationTheme,
         appBarTheme: _appBarTheme,
