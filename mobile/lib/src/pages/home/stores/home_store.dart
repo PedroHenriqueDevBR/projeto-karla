@@ -12,9 +12,11 @@ class HomeStore extends _HomeStore with _$HomeStore {
   HomeStore({
     required UserRepository userRepository,
     required EventRepository repository,
+    required BuildContext context,
   }) {
     super.userRepository = userRepository;
     super.eventRepository = repository;
+    super.context = context;
   }
 }
 
@@ -22,9 +24,11 @@ abstract class _HomeStore with Store {
   ObservableList<EventModel> events = ObservableList<EventModel>();
   late EventRepository eventRepository;
   late UserRepository userRepository;
+  late BuildContext context;
 
   @action
   void addManyEvents(List<EventModel> list) {
+    this.events.clear();
     this.events.addAll(list);
   }
 
@@ -35,13 +39,16 @@ abstract class _HomeStore with Store {
     } on HttpResponseException catch (error) {
       if (error.response.statusCode >= 500) {
         asuka.showSnackBar(asuka.AsukaSnackbar.alert('Erro 503 - Servidor indisponível'));
+      } else if (error.response.statusCode == 401) {
+        asuka.showSnackBar(asuka.AsukaSnackbar.alert('Sua sessão foi encerrada, entre novamente'));
+        logout();
       } else {
         asuka.showSnackBar(asuka.AsukaSnackbar.alert('${error.response.statusCode} - Erro interno'));
       }
     }
   }
 
-  Future<void> logout(BuildContext context) async {
+  Future<void> logout() async {
     await userRepository.logout();
     Navigator.popAndPushNamed(context, '');
   }

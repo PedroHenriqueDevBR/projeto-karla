@@ -17,16 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-  HomeStore _store = HomeStore(
-    userRepository: UserRepository(
-      client: HttpClientService(),
-      appData: AppPreferenceService(),
-    ),
-    repository: EventRepository(
-      client: HttpClientService(),
-      appData: AppPreferenceService(),
-    ),
-  );
+  late HomeStore _store;
   AppAssets _assets = AppAssets();
   HomeStyle _style = HomeStyle();
   late ReactionDisposer _disposer;
@@ -34,6 +25,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
+    _store = HomeStore(
+      context: context,
+      userRepository: UserRepository(
+        client: HttpClientService(),
+        appData: AppPreferenceService(),
+      ),
+      repository: EventRepository(
+        client: HttpClientService(),
+        appData: AppPreferenceService(),
+      ),
+    );
     _store.getEvents();
   }
 
@@ -59,7 +61,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         title: Text('Karla App'),
         actions: [
           TextButton(
-            onPressed: () => _store.logout(context),
+            onPressed: _store.logout,
             child: Text(
               'Sair',
               style: TextStyle(color: Colors.white),
