@@ -1,23 +1,30 @@
+import 'package:asuka/asuka.dart' as asuka;
 import 'package:flutter/material.dart';
+
 import 'package:projeto_karla/src/pages/show_event/show_event_style.dart';
 import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
 import 'package:projeto_karla/src/shared/core/assets.dart';
-import 'package:projeto_karla/src/shared/models/event_model.dart';
-import 'package:asuka/asuka.dart' as asuka;
 
 class HeaderWidget extends StatelessWidget {
-  final EventModel event;
+  final String imageUrl;
+  TextEditingController txtTitle;
+  TextEditingController txtImage;
   final _style = ShowEventStyle();
   final _assets = AppAssets();
   final _textTheme = AppTextTheme();
-  final txtTitle;
   bool edit;
+  Function onSaveImage;
+  VoidCallback onShare;
 
   HeaderWidget({
-    required this.event,
+    Key? key,
+    required this.imageUrl,
     required this.txtTitle,
+    required this.txtImage,
     this.edit = false,
-  });
+    required this.onSaveImage,
+    required this.onShare,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +33,7 @@ class HeaderWidget extends StatelessWidget {
       children: [
         _imageHeader(),
         _internalGradient(
+          context: context,
           child: Container(
             padding: const EdgeInsets.all(12.0),
             width: size.width,
@@ -41,13 +49,16 @@ class HeaderWidget extends StatelessWidget {
       width: double.maxFinite,
       height: 220,
       decoration: _style.cardHeaderDecoration(
-        image: event.background ?? _assets.defaultImage,
-        isNetwork: event.background != null,
+        image: imageUrl.isNotEmpty ? imageUrl : _assets.defaultImage,
+        isNetwork: imageUrl.isNotEmpty,
       ),
     );
   }
 
-  Widget _internalGradient({required Widget child}) {
+  Widget _internalGradient({
+    required Widget child,
+    required BuildContext context,
+  }) {
     return Container(
       height: 220,
       decoration: BoxDecoration(
@@ -59,6 +70,14 @@ class HeaderWidget extends StatelessWidget {
       ),
       child: Stack(
         children: [
+          Positioned(
+            child: Container(
+              decoration: _style.backButtonStyle,
+              child: BackButton(color: Colors.white),
+            ),
+            top: 12.0,
+            left: 12.0,
+          ),
           Positioned(
             child: child,
             bottom: 0.0,
@@ -97,6 +116,7 @@ class HeaderWidget extends StatelessWidget {
             ),
           ),
           TextFormField(
+            controller: txtTitle,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (value) {
               if (value == null || value.isEmpty) return 'Campo obrigatório';
@@ -121,13 +141,13 @@ class HeaderWidget extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              event.title.isNotEmpty ? event.title : 'Titulo do evento',
+              txtTitle.text.isNotEmpty ? txtTitle.text : 'Titulo do evento',
               style: _textTheme.titleStyle.copyWith(color: Colors.white),
             ),
           ),
           Container(
             child: IconButton(
-              onPressed: () {},
+              onPressed: this.onShare,
               icon: Icon(
                 Icons.share,
                 color: Colors.white,
@@ -149,6 +169,7 @@ class HeaderWidget extends StatelessWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               TextFormField(
+                controller: txtImage,
                 decoration: InputDecoration(
                   labelText: 'URL',
                   hintText: 'Digite a url da imagem',
@@ -159,19 +180,23 @@ class HeaderWidget extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        this.onSaveImage();
+                        Navigator.pop(dialogContext);
+                      },
                       child: Text('Salvar'),
                     ),
                   ),
                 ],
               ),
+              SizedBox(height: 16.0),
               Row(
                 children: [
                   Expanded(
                     child: TextButton(
                       onPressed: () => Navigator.pop(dialogContext),
                       child: Text(
-                        'Cancelar resposta',
+                        'Cancelar',
                         textAlign: TextAlign.center,
                       ),
                     ),

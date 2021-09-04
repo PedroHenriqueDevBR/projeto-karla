@@ -1,4 +1,3 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -79,20 +78,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    AnimatedTextKit(
-                      animatedTexts: [
-                        TypewriterAnimatedText(
-                          'Nenhum evento para ser exibido',
-                          textStyle: _style.textStyleNothingToShow,
-                          speed: Duration(milliseconds: 100),
-                        ),
-                        TypewriterAnimatedText(
-                          '+ Evento para criar um novo',
-                          textStyle: _style.textStyleNothingToShow,
-                          speed: Duration(milliseconds: 100),
-                        ),
-                      ],
-                      repeatForever: true,
+                    Text(
+                      'Nenhum evento para ser exibido',
+                      style: _style.textStyleNothingToShow,
                     ),
                     SizedBox(height: 16.0),
                     OutlinedButton(
@@ -112,7 +100,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       padding: EdgeInsets.all(8.0),
                       child: EventCardWidget(
                         event: event,
-                        onClick: () => _store.goToShowEventPage(event),
+                        onClick: () => _store.goToShowEventPage(event: event),
                       ),
                     );
                   },
@@ -121,7 +109,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       ),
       floatingActionButton: FloatingActionButton.extended(
         icon: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () => _store.goToShowEventPage(),
         label: Text('Evento'),
       ),
     );

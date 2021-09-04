@@ -22,6 +22,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     changeNavigatorColor();
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       builder: asuka.builder,
       navigatorObservers: [
         asuka.asukaHeroController //if u don`t add this Hero will not work

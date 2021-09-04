@@ -8,7 +8,6 @@ import 'package:projeto_karla/src/pages/show_event/widgets/event_form_widget.dar
 import 'package:projeto_karla/src/pages/show_event/widgets/header_widget.dart';
 import 'package:projeto_karla/src/shared/models/event_model.dart';
 
-// ignore: must_be_immutable
 class ShowEventPage extends StatefulWidget {
   EventModel? eventModel;
   ShowEventPage({this.eventModel});
@@ -17,12 +16,12 @@ class ShowEventPage extends StatefulWidget {
 }
 
 class _ShowEventPageState extends State<ShowEventPage> {
-  final store = ShowEventStore();
+  final _store = ShowEventStore();
   final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    store.initEvent(widget.eventModel);
+    _store.initEvent(widget.eventModel);
     super.initState();
   }
 
@@ -34,33 +33,41 @@ class _ShowEventPageState extends State<ShowEventPage> {
           children: [
             Observer(
               builder: (context) => HeaderWidget(
-                event: store.event,
-                txtTitle: store.txtTitle,
-                edit: store.editing,
+                imageUrl: _store.imageUrl,
+                txtTitle: _store.txtTitle,
+                txtImage: _store.txtImageUrl,
+                edit: _store.editing,
+                onSaveImage: _store.changeBackgroundImage,
+                onShare: _store.shareEvent,
               ),
             ),
             Observer(
-              builder: (context) => store.editing
+              builder: (context) => _store.editing
                   ? EventFormWidget(
                       formKey: formKey,
-                      txtDescription: store.txtDescription,
-                      txtDate: store.txtDate,
-                      txtConfirmText: store.txtConfirmText,
-                      txtCancelText: store.txtCancelText,
+                      txtDescription: _store.txtDescription,
+                      txtConfirmText: _store.txtConfirmText,
+                      txtCancelText: _store.txtCancelText,
+                      txtDate: _store.txtDate,
+                      onCancel: _store.toggleEdit,
                     )
                   : EventContentWidget(
-                      eventModel: store.event,
+                      eventModel: _store.event,
                     ),
             ),
           ],
         ),
       ),
       bottomNavigationBar: Observer(
-        builder: (context) => store.editing
-            ? BottomButtonWidget(onClick: store.toggleEdit)
+        builder: (context) => _store.editing
+            ? BottomButtonWidget(onClick: () {
+                if (formKey.currentState!.validate()) {
+                  _store.toggleEdit();
+                }
+              })
             : BottomNavigationWidget(
-                eventModel: store.event,
-                editOption: store.toggleEdit,
+                eventModel: _store.event,
+                editOption: _store.toggleEdit,
               ),
       ),
     );

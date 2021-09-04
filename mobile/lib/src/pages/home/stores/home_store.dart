@@ -69,7 +69,7 @@ abstract class _HomeStore with Store {
     getEvents();
   }
 
-  void goToShowEventPage(EventModel event) async {
+  void goToShowEventPage({EventModel? event}) async {
     await Navigator.push(
       context,
       MaterialPageRoute(

@@ -24,21 +24,6 @@ mixin _$ShowEventStore on _ShowEventStore, Store {
     });
   }
 
-  final _$eventAtom = Atom(name: '_ShowEventStore.event');
-
-  @override
-  EventModel get event {
-    _$eventAtom.reportRead();
-    return super.event;
-  }
-
-  @override
-  set event(EventModel value) {
-    _$eventAtom.reportWrite(value, super.event, () {
-      super.event = value;
-    });
-  }
-
   final _$imageUrlAtom = Atom(name: '_ShowEventStore.imageUrl');
 
   @override
@@ -54,15 +39,30 @@ mixin _$ShowEventStore on _ShowEventStore, Store {
     });
   }
 
+  final _$eventAtom = Atom(name: '_ShowEventStore.event');
+
+  @override
+  EventModel get event {
+    _$eventAtom.reportRead();
+    return super.event;
+  }
+
+  @override
+  set event(EventModel value) {
+    _$eventAtom.reportWrite(value, super.event, () {
+      super.event = value;
+    });
+  }
+
   final _$_ShowEventStoreActionController =
       ActionController(name: '_ShowEventStore');
 
   @override
-  void changeBackgroundImage(String url) {
+  void changeBackgroundImage() {
     final _$actionInfo = _$_ShowEventStoreActionController.startAction(
         name: '_ShowEventStore.changeBackgroundImage');
     try {
-      return super.changeBackgroundImage(url);
+      return super.changeBackgroundImage();
     } finally {
       _$_ShowEventStoreActionController.endAction(_$actionInfo);
     }
@@ -80,11 +80,22 @@ mixin _$ShowEventStore on _ShowEventStore, Store {
   }
 
   @override
+  dynamic changeCurrentEvent(EventModel value) {
+    final _$actionInfo = _$_ShowEventStoreActionController.startAction(
+        name: '_ShowEventStore.changeCurrentEvent');
+    try {
+      return super.changeCurrentEvent(value);
+    } finally {
+      _$_ShowEventStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 editing: ${editing},
-event: ${event},
-imageUrl: ${imageUrl}
+imageUrl: ${imageUrl},
+event: ${event}
     ''';
   }
 }

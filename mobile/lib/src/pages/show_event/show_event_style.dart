@@ -15,7 +15,12 @@ class ShowEventStyle {
 
   BoxDecoration get iconButtonStyle => BoxDecoration(
         borderRadius: BorderRadius.circular(50),
-        color: _appThemes.primaryColor,
+        color: _appThemes.secondaryColor,
+      );
+
+  BoxDecoration get backButtonStyle => BoxDecoration(
+        borderRadius: BorderRadius.circular(50),
+        color: Colors.black.withAlpha(50),
       );
 
   BoxDecoration get bottomSheetStyle => BoxDecoration(

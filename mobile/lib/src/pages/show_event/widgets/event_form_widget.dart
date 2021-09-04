@@ -1,20 +1,21 @@
-import 'package:asuka/asuka.dart' as asuka;
 import 'package:flutter/material.dart';
 
 class EventFormWidget extends StatelessWidget {
   GlobalKey<FormState> formKey;
-  TextEditingController txtDescription;
-  TextEditingController txtDate;
-  TextEditingController txtConfirmText;
-  TextEditingController txtCancelText;
+  final TextEditingController txtDescription;
+  final TextEditingController txtConfirmText;
+  final TextEditingController txtCancelText;
+  final TextEditingController txtDate;
+  final VoidCallback onCancel;
 
   EventFormWidget({
     Key? key,
     required this.formKey,
     required this.txtDescription,
-    required this.txtDate,
     required this.txtConfirmText,
     required this.txtCancelText,
+    required this.txtDate,
+    required this.onCancel,
   }) : super(key: key);
 
   @override
@@ -27,11 +28,11 @@ class EventFormWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
+              controller: txtDescription,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) {
                 if (value == null || value.isEmpty) return 'Adicione informações sobre o evento';
               },
-              controller: txtDescription,
               minLines: 5,
               maxLines: 5,
               keyboardType: TextInputType.multiline,
@@ -45,6 +46,7 @@ class EventFormWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextFormField(
+                    controller: txtDate,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       final splitValue = value!.split('/');
@@ -62,7 +64,6 @@ class EventFormWidget extends StatelessWidget {
                       if (DateTime.now().compareTo(parseDate) != -1)
                         return 'A data não pode ser anterior ou igual à hoje';
                     },
-                    controller: txtDate,
                     decoration: InputDecoration(
                       labelText: 'Data',
                       hintText: 'Data limite para resposta',
@@ -93,6 +94,14 @@ class EventFormWidget extends StatelessWidget {
                 hintText: 'Texto para cancelar presença',
               ),
             ),
+            SizedBox(height: 16.0),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(onPressed: this.onCancel, child: Text('Cancelar edição')),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -104,7 +113,7 @@ class EventFormWidget extends StatelessWidget {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2030),
     );
     if (date != null) txtDate.text = _formatedDate(date);
   }

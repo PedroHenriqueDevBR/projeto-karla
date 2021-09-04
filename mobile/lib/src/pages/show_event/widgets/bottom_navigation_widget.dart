@@ -34,7 +34,7 @@ class BottomNavigationWidget extends StatelessWidget {
       items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.group_outlined),
-          label: 'Visualizar',
+          label: 'Respostas',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.edit_outlined),
@@ -42,7 +42,7 @@ class BottomNavigationWidget extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.add),
-          label: 'Resposta',
+          label: 'Novo',
         ),
       ],
     );
