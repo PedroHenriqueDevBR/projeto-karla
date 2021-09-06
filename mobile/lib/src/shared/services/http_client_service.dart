@@ -44,7 +44,7 @@ class HttpClientService implements IClientHTTP {
     Map<String, String> headers = _setAuthorization(key: jwtKey);
     final uri = _getBaseUrl(url);
     try {
-      Response response = await http.post(uri, body: data, headers: headers);
+      Response response = await http.post(uri, body: jsonEncode(data), headers: headers);
       return HttpResponseModel(
         statusCode: response.statusCode,
         data: jsonDecode(response.body.isNotEmpty ? response.body : '{}'),
@@ -60,8 +60,7 @@ class HttpClientService implements IClientHTTP {
     Map<String, String> headers = _setAuthorization(key: jwtKey);
     final uri = _getBaseUrl(url);
     try {
-      // Response response = await Dio().put(uri, data: data, options: Options(headers: headers));
-      Response response = await http.put(uri, body: data, headers: headers);
+      Response response = await http.put(uri, body: jsonEncode(data), headers: headers);
       return HttpResponseModel(
         statusCode: response.statusCode,
         data: jsonDecode(response.body.isNotEmpty ? response.body : '{}'),
@@ -77,7 +76,6 @@ class HttpClientService implements IClientHTTP {
     Map<String, String> headers = _setAuthorization(key: jwtKey);
     final uri = _getBaseUrl(url);
     try {
-      // Response response = await Dio().delete(uri, options: Options(headers: headers));
       Response response = await http.delete(uri, headers: headers);
       return HttpResponseModel(
         statusCode: response.statusCode,
