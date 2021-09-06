@@ -25,7 +25,7 @@ class HttpClientService implements IClientHTTP {
       Response response = await http.get(uri, headers: headers);
       return HttpResponseModel(
         statusCode: response.statusCode,
-        data: jsonDecode(response.body.isNotEmpty ? response.body : '{}'),
+        data: jsonDecode(response.body.isNotEmpty ? utf8.decode(response.bodyBytes) : '{}'),
         headers: response.headers,
       );
     } catch (error) {
