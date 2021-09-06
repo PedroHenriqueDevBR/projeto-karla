@@ -66,6 +66,7 @@ class _ShowEventPageState extends State<ShowEventPage> {
                         txtCancelText: _store.txtCancelText,
                         txtDate: _store.txtDate,
                         onCancel: _store.toggleEdit,
+                        onDelete: _store.deleteEvent,
                       )
                     : EventContentWidget(
                         eventModel: _store.event,

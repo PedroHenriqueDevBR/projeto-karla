@@ -6,6 +6,7 @@ class EventFormWidget extends StatelessWidget {
   final TextEditingController txtCancelText;
   final TextEditingController txtDate;
   final VoidCallback onCancel;
+  final VoidCallback onDelete;
 
   EventFormWidget({
     Key? key,
@@ -14,6 +15,7 @@ class EventFormWidget extends StatelessWidget {
     required this.txtCancelText,
     required this.txtDate,
     required this.onCancel,
+    required this.onDelete,
   }) : super(key: key);
 
   @override
@@ -55,8 +57,6 @@ class EventFormWidget extends StatelessWidget {
                     if (day == null || month == null || year == null) return 'A data precisa ter o formato 00/00/0000';
                     final parseDate = DateTime.tryParse('${splitValue[2]}-${splitValue[1]}-${splitValue[0]} 00:00:00');
                     if (parseDate == null) return 'Data inválida';
-                    if (DateTime.now().compareTo(parseDate) != -1)
-                      return 'A data não pode ser anterior ou igual à hoje';
                   },
                   decoration: InputDecoration(
                     labelText: 'Data',
@@ -87,6 +87,14 @@ class EventFormWidget extends StatelessWidget {
               labelText: 'Texto cancelar',
               hintText: 'Texto para cancelar presença',
             ),
+          ),
+          SizedBox(height: 16.0),
+          Row(
+            children: [
+              Expanded(
+                child: TextButton(onPressed: this.onDelete, child: Text('Deletar evento')),
+              ),
+            ],
           ),
           SizedBox(height: 16.0),
           Row(

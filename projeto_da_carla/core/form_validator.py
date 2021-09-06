@@ -34,9 +34,6 @@ def event_register_validate_form_or_errors(data):
             errors.append('expiration_date is required')
         try:
             expiration_date = datetime.fromisoformat(data['expiration_date'])
-            current_date = datetime.now()
-            if expiration_date <= current_date:
-                errors.append('expiration_date must be greater than current date')
         except:
             errors.append('Invalid date format')
     return errors

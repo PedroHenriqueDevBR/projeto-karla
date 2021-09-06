@@ -118,9 +118,6 @@ class EventRepository {
   List<String> _validToSaveOrErrors(EventModel event) {
     List<String> errors = [];
     if (event.title.isEmpty) errors.add('Titulo não pode ser vazio');
-    if (event.expirationDate.compareTo(DateTime.now()) < 0) {
-      errors.add('A data deve ser posterior ao dia atual');
-    }
     return errors;
   }
 }

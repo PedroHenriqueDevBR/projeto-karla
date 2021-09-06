@@ -3,6 +3,7 @@ import 'package:mobx/mobx.dart';
 import 'package:projeto_karla/src/pages/show_event/show_event_style.dart';
 import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
 import 'package:projeto_karla/src/shared/exceptions/http_response_exception.dart';
+import 'package:projeto_karla/src/shared/exceptions/invalid_data_exception.dart';
 import 'package:projeto_karla/src/shared/models/event_model.dart';
 import 'package:asuka/asuka.dart' as asuka;
 import 'package:projeto_karla/src/shared/repositories/event_repository.dart';
@@ -128,6 +129,31 @@ abstract class _ShowEventStore with Store {
       await eventRepository.updateEvent(event);
       _showMessage('Dados atualizados');
       this.toggleEdit();
+    } on HttpResponseException catch (error) {
+      if (error.response.statusCode >= 500) {
+        asuka.showSnackBar(asuka.AsukaSnackbar.alert('Erro 503 - Servidor indisponível'));
+      } else if (error.response.statusCode == 401) {
+        asuka.showSnackBar(asuka.AsukaSnackbar.alert('Sua sessão foi encerrada, entre novamente'));
+        logout();
+      } else {
+        asuka.showSnackBar(asuka.AsukaSnackbar.alert('${error.response.statusCode} - Erro interno'));
+      }
+    } on InvalidDataException catch (error) {
+      _showMessage(error.errors.toString());
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> deleteEvent() async {
+    if (event.id == null) {
+      _showMessage('Evento não salvo, impossível deletar');
+      return;
+    }
+    try {
+      eventRepository.deleteEvent(event);
+      _showMessage('Evento deletado');
+      Navigator.pop(context);
     } on HttpResponseException catch (error) {
       if (error.response.statusCode >= 500) {
         asuka.showSnackBar(asuka.AsukaSnackbar.alert('Erro 503 - Servidor indisponível'));
