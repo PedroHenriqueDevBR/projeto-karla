@@ -29,27 +29,59 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: _style.backgroundContainer,
-        child: SingleChildScrollView(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Center(
-              child: Wrap(
-                children: [
-                  Card(
-                    margin: const EdgeInsets.all(32.0),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
-                      child: _formLogin(),
-                    ),
+      body: Observer(
+        builder: (_) => Stack(
+          children: [
+            _contentWidget(size),
+            _store.isLoading ? _loadingWidget(size) : Container(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _loadingWidget(Size size) {
+    return Container(
+      width: size.width,
+      height: size.height,
+      color: Colors.black.withAlpha(100),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'carregando',
+              style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
+            ),
+            SizedBox(height: 8.0),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _contentWidget(Size size) {
+    return Container(
+      width: size.width,
+      height: size.height,
+      decoration: _style.backgroundContainer,
+      child: SingleChildScrollView(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+            child: Wrap(
+              children: [
+                Card(
+                  margin: const EdgeInsets.all(32.0),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
+                    child: _formLogin(),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

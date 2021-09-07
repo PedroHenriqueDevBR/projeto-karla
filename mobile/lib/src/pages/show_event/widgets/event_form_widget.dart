@@ -7,6 +7,7 @@ class EventFormWidget extends StatelessWidget {
   final TextEditingController txtDate;
   final VoidCallback onCancel;
   final VoidCallback onDelete;
+  final bool isSaved;
 
   EventFormWidget({
     Key? key,
@@ -16,6 +17,7 @@ class EventFormWidget extends StatelessWidget {
     required this.txtDate,
     required this.onCancel,
     required this.onDelete,
+    required this.isSaved,
   }) : super(key: key);
 
   @override
@@ -89,21 +91,27 @@ class EventFormWidget extends StatelessWidget {
             ),
           ),
           SizedBox(height: 16.0),
-          Row(
-            children: [
-              Expanded(
-                child: TextButton(onPressed: this.onDelete, child: Text('Deletar evento')),
-              ),
-            ],
-          ),
-          SizedBox(height: 16.0),
-          Row(
-            children: [
-              Expanded(
-                child: TextButton(onPressed: this.onCancel, child: Text('Cancelar edição')),
-              ),
-            ],
-          ),
+          isSaved
+              ? Wrap(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(onPressed: this.onDelete, child: Text('Deletar evento')),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.0),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(onPressed: this.onCancel, child: Text('Cancelar edição')),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              : Container(),
         ],
       ),
     );

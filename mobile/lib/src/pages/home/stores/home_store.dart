@@ -58,16 +58,6 @@ abstract class _HomeStore with Store {
     }
   }
 
-  @action
-  Future<void> addOrUpdateEvent(EventModel event) async {
-    if (event.id != null) {
-      int index = events.indexWhere((element) => element.id == event.id);
-      if (index != -1) events[index] = event;
-      return;
-    }
-    getEvents();
-  }
-
   Future<void> logout() async {
     await userRepository.logout();
     Navigator.popAndPushNamed(context, '');
@@ -85,13 +75,7 @@ abstract class _HomeStore with Store {
         builder: (context) => ShowEventPage(eventModel: event),
       ),
     ).then((value) {
-      if (value != null) {
-        if (value.runtimeType == EventModel) {
-          EventModel event = value as EventModel;
-          addOrUpdateEvent(event);
-        }
-        getEvents();
-      }
+      getEvents();
     });
   }
 }

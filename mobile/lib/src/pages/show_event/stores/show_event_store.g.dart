@@ -39,6 +39,21 @@ mixin _$ShowEventStore on _ShowEventStore, Store {
     });
   }
 
+  final _$isLoadingAtom = Atom(name: '_ShowEventStore.isLoading');
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
   final _$eventAtom = Atom(name: '_ShowEventStore.event');
 
   @override
@@ -56,6 +71,17 @@ mixin _$ShowEventStore on _ShowEventStore, Store {
 
   final _$_ShowEventStoreActionController =
       ActionController(name: '_ShowEventStore');
+
+  @override
+  void setLoading(bool value) {
+    final _$actionInfo = _$_ShowEventStoreActionController.startAction(
+        name: '_ShowEventStore.setLoading');
+    try {
+      return super.setLoading(value);
+    } finally {
+      _$_ShowEventStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void changeBackgroundImage() {
@@ -95,6 +121,7 @@ mixin _$ShowEventStore on _ShowEventStore, Store {
     return '''
 editing: ${editing},
 imageUrl: ${imageUrl},
+isLoading: ${isLoading},
 event: ${event}
     ''';
   }

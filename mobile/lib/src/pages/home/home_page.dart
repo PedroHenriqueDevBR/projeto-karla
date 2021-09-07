@@ -58,19 +58,24 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Observer(
-      builder: (_) => _store.isLoading ? _loadingWidget() : _contentWidget(),
+      builder: (_) => Stack(
+        children: [
+          _contentWidget(),
+          _store.isLoading ? _loadingWidget(size) : Container(),
+        ],
+      ),
     );
   }
 
-  Scaffold _loadingWidget() {
-    return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor.withGreen(100),
-      body: Center(
+  Widget _loadingWidget(Size size) {
+    return Container(
+      width: size.width,
+      height: size.height,
+      color: Colors.black.withAlpha(100),
+      child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(_assets.player),
-            SizedBox(height: 8.0),
             Text(
               'carregando...',
               style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),

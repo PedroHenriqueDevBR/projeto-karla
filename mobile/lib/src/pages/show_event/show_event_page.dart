@@ -42,6 +42,38 @@ class _ShowEventPageState extends State<ShowEventPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Observer(
+      builder: (_) => Stack(
+        children: [
+          _contentPage(),
+          _store.isLoading ? _loadingWidget(size) : Container(),
+        ],
+      ),
+    );
+  }
+
+  Widget _loadingWidget(Size size) {
+    return Container(
+      width: size.width,
+      height: size.height,
+      color: Colors.black.withAlpha(100),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'carregando...',
+              style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
+            ),
+            SizedBox(height: 8.0),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _contentPage() {
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -67,6 +99,7 @@ class _ShowEventPageState extends State<ShowEventPage> {
                         txtDate: _store.txtDate,
                         onCancel: _store.toggleEdit,
                         onDelete: _store.deleteEvent,
+                        isSaved: _store.event.id != null,
                       )
                     : EventContentWidget(
                         eventModel: _store.event,

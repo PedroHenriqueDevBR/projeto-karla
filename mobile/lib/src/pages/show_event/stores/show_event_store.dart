@@ -46,7 +46,13 @@ abstract class _ShowEventStore with Store {
   String imageUrl = '';
 
   @observable
+  bool isLoading = false;
+
+  @observable
   EventModel event = EventModel.empty();
+
+  @action
+  void setLoading(bool value) => this.isLoading = value;
 
   @action
   void changeBackgroundImage() {
@@ -93,6 +99,7 @@ abstract class _ShowEventStore with Store {
 
   Future<void> _registerEvent() async {
     if (!_eventDataIsValid()) return;
+    setLoading(true);
     final splitedtextDate = txtDate.text.split('/');
     EventModel eventToRegister = EventModel(
       title: txtTitle.text,
@@ -117,13 +124,14 @@ abstract class _ShowEventStore with Store {
       } else {
         asuka.showSnackBar(asuka.AsukaSnackbar.alert('${error.response.statusCode} - Erro interno'));
       }
-    } catch (error) {
-      print(error);
+    } finally {
+      setLoading(false);
     }
   }
 
   Future<void> _updateEvent() async {
     if (!_eventDataIsValid()) return;
+    setLoading(true);
     _setEventDataToUpdate();
     try {
       await eventRepository.updateEvent(event);
@@ -140,8 +148,8 @@ abstract class _ShowEventStore with Store {
       }
     } on InvalidDataException catch (error) {
       _showMessage(error.errors.toString());
-    } catch (error) {
-      print(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -150,6 +158,7 @@ abstract class _ShowEventStore with Store {
       _showMessage('Evento não salvo, impossível deletar');
       return;
     }
+    setLoading(true);
     try {
       eventRepository.deleteEvent(event);
       _showMessage('Evento deletado');
@@ -163,8 +172,8 @@ abstract class _ShowEventStore with Store {
       } else {
         asuka.showSnackBar(asuka.AsukaSnackbar.alert('${error.response.statusCode} - Erro interno'));
       }
-    } catch (error) {
-      print(error);
+    } finally {
+      setLoading(false);
     }
   }
 

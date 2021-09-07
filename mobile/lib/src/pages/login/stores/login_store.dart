@@ -56,7 +56,10 @@ abstract class _LoginStore with Store {
     } on HttpResponseException catch (error) {
       if (error.response.statusCode == 503) {
         asuka.showSnackBar(asuka.AsukaSnackbar.alert('Erro 503 - Servidor indisponível'));
+      } else if (error.response.statusCode == 415) {
+        asuka.showSnackBar(asuka.AsukaSnackbar.alert('415 - Erro no servidor'));
       } else {
+        print(error.response.statusCode);
         asuka.showSnackBar(asuka.AsukaSnackbar.message('Username ou senha incorreto'));
       }
     } finally {
