@@ -217,8 +217,9 @@ abstract class _ShowEventStore with Store {
       return;
     }
     Share.share(
-      'http://localhost:8000/evento/${event.id}/${event.title.replaceAll(' ', '')}',
-      subject: 'Look what I made!',
+      'Acesse o meu evento ${event.title} e utilize a senha ${event.password} ' +
+          'para acessar e confirmar a sua presença.\n\n' +
+          'http://localhost:8000/evento/${event.id}/${event.title.replaceAll(' ', '')}',
     );
   }
 }

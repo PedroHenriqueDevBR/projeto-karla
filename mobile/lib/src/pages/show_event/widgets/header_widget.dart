@@ -35,7 +35,6 @@ class HeaderWidget extends StatelessWidget {
         _internalGradient(
           context: context,
           child: Container(
-            padding: const EdgeInsets.all(12.0),
             width: size.width,
             child: this.edit ? _inputTitle(context, size) : _information(),
           ),
@@ -71,16 +70,16 @@ class HeaderWidget extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
+            child: child,
+            bottom: 0.0,
+          ),
+          Positioned(
             child: Container(
               decoration: _style.backButtonStyle,
               child: BackButton(color: Colors.white),
             ),
-            top: 12.0,
+            top: 40.0,
             left: 12.0,
-          ),
-          Positioned(
-            child: child,
-            bottom: 0.0,
           ),
         ],
       ),
@@ -89,43 +88,37 @@ class HeaderWidget extends StatelessWidget {
 
   Widget _inputTitle(BuildContext context, Size size) {
     return Container(
-      width: double.maxFinite,
-      height: 175,
-      color: Colors.transparent,
-      child: Column(
+      padding: const EdgeInsets.all(12.0),
+      width: MediaQuery.of(context).size.width,
+      color: Colors.black.withAlpha(20),
+      child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: Wrap(
-              children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  child: IconButton(
-                    onPressed: showChangeImageDialog,
-                    icon: Icon(
-                      Icons.image_outlined,
-                      color: Colors.white,
-                    ),
-                  ),
-                  decoration: _style.iconButtonStyle,
-                ),
-              ],
+            child: TextFormField(
+              controller: txtTitle,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: (value) {
+                if (value == null || value.isEmpty) return 'Campo obrigatório';
+              },
+              decoration: InputDecoration(
+                labelText: 'Titulo',
+                hintText: 'Digite o titulo do evento',
+                filled: true,
+                fillColor: Colors.white,
+              ),
             ),
           ),
-          TextFormField(
-            controller: txtTitle,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: (value) {
-              if (value == null || value.isEmpty) return 'Campo obrigatório';
-            },
-            decoration: InputDecoration(
-              labelText: 'Titulo',
-              hintText: 'Digite o titulo do evento',
-              filled: true,
-              fillColor: Colors.white,
+          SizedBox(width: 8.0),
+          Container(
+            child: IconButton(
+              onPressed: showChangeImageDialog,
+              icon: Icon(
+                Icons.image_outlined,
+                color: Colors.white,
+              ),
             ),
           ),
         ],
@@ -135,9 +128,11 @@ class HeaderWidget extends StatelessWidget {
 
   Widget _information() {
     return Container(
+      padding: const EdgeInsets.all(12.0),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: Text(
@@ -153,7 +148,7 @@ class HeaderWidget extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            decoration: _style.iconButtonStyle,
+            decoration: _style.backButtonStyle,
           ),
         ],
       ),

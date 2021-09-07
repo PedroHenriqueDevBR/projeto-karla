@@ -27,13 +27,20 @@ abstract class _HomeStore with Store {
   late UserRepository userRepository;
   late BuildContext context;
 
+  @observable
+  bool isLoading = false;
+
   @action
   void addManyEvents(List<EventModel> list) {
     this.events.clear();
     this.events.addAll(list);
   }
 
+  @action
+  void setLoading(bool value) => this.isLoading = value;
+
   Future<void> getEvents() async {
+    setLoading(true);
     try {
       List<EventModel> eventsResponse = await eventRepository.getAllEvents();
       addManyEvents(eventsResponse);
@@ -46,6 +53,8 @@ abstract class _HomeStore with Store {
       } else {
         asuka.showSnackBar(asuka.AsukaSnackbar.alert('${error.response.statusCode} - Erro interno'));
       }
+    } finally {
+      setLoading(false);
     }
   }
 

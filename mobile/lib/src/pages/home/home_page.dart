@@ -56,6 +56,33 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Observer(
+      builder: (_) => _store.isLoading ? _loadingWidget() : _contentWidget(),
+    );
+  }
+
+  Scaffold _loadingWidget() {
+    return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor.withGreen(100),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(_assets.player),
+            SizedBox(height: 8.0),
+            Text(
+              'carregando...',
+              style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white),
+            ),
+            SizedBox(height: 8.0),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _contentWidget() {
     return Scaffold(
       appBar: AppBar(
         title: Text('Karla App'),

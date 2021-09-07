@@ -13,14 +13,9 @@ class ShowEventStyle {
         shape: RoundedRectangleBorder(),
       );
 
-  BoxDecoration get iconButtonStyle => BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
-        color: _appThemes.secondaryColor,
-      );
-
   BoxDecoration get backButtonStyle => BoxDecoration(
         borderRadius: BorderRadius.circular(50),
-        color: Colors.black.withAlpha(50),
+        color: Colors.black.withAlpha(100),
       );
 
   BoxDecoration get bottomSheetStyle => BoxDecoration(
