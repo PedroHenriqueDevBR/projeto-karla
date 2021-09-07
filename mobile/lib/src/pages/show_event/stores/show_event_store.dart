@@ -43,7 +43,7 @@ abstract class _ShowEventStore with Store {
   TextEditingController txtConfirmText = TextEditingController();
   TextEditingController txtCancelText = TextEditingController();
   TextEditingController txtImageUrl = TextEditingController();
-  TextEditingController txtPassword = TextEditingController(text: '1234');
+  TextEditingController txtPassword = TextEditingController();
   TextEditingController txtResponse = TextEditingController();
 
   @observable
@@ -83,6 +83,7 @@ abstract class _ShowEventStore with Store {
       this.txtDate.text = eventArg.formatedDate;
       this.txtConfirmText.text = eventArg.confirmTextFormated;
       this.txtCancelText.text = eventArg.cancelTextFormated;
+      this.txtPassword.text = eventArg.password ?? '';
       this.imageUrl = eventArg.background ?? '';
       this.changeCurrentEvent(eventArg);
       return;

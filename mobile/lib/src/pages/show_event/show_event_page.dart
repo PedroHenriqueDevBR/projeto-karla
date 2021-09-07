@@ -114,6 +114,7 @@ class _ShowEventPageState extends State<ShowEventPage> {
                         txtConfirmText: _store.txtConfirmText,
                         txtCancelText: _store.txtCancelText,
                         txtDate: _store.txtDate,
+                        txtPassword: _store.txtPassword,
                         onCancel: _store.toggleEdit,
                         onDelete: _store.deleteEvent,
                         isSaved: _store.event.id != null,

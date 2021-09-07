@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:asuka/asuka.dart' as asuka;
 
 class EventFormWidget extends StatelessWidget {
   final TextEditingController txtDescription;
   final TextEditingController txtConfirmText;
   final TextEditingController txtCancelText;
   final TextEditingController txtDate;
+  final TextEditingController txtPassword;
   final VoidCallback onCancel;
   final VoidCallback onDelete;
   final bool isSaved;
@@ -15,6 +17,7 @@ class EventFormWidget extends StatelessWidget {
     required this.txtConfirmText,
     required this.txtCancelText,
     required this.txtDate,
+    required this.txtPassword,
     required this.onCancel,
     required this.onDelete,
     required this.isSaved,
@@ -76,6 +79,20 @@ class EventFormWidget extends StatelessWidget {
           ),
           SizedBox(height: 16.0),
           TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (value) {
+              if (value == null || value.isEmpty) return 'Campo obrigatório';
+              if (value.length < 4) return 'Digite pelo menos 4 caracteres';
+            },
+            controller: txtPassword,
+            obscureText: true,
+            decoration: InputDecoration(
+              labelText: 'Chave acesso',
+              hintText: 'Chave para o convidado acessar a página do evento',
+            ),
+          ),
+          SizedBox(height: 16.0),
+          TextFormField(
             controller: txtConfirmText,
             decoration: InputDecoration(
               labelText: 'Texto confirmar',
@@ -92,24 +109,37 @@ class EventFormWidget extends StatelessWidget {
           ),
           SizedBox(height: 16.0),
           isSaved
-              ? Wrap(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextButton(onPressed: this.onDelete, child: Text('Deletar evento')),
+              ? Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: _confirmRemoveResponse,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.delete_outline),
+                              Text('Deletar evento'),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 16.0),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextButton(onPressed: this.onCancel, child: Text('Cancelar edição')),
+                      ),
+                      SizedBox(height: 8.0),
+                      Expanded(
+                        child: TextButton(
+                          onPressed: this.onCancel,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.close),
+                              Text('Cancelar edição'),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 )
               : Container(),
         ],
@@ -134,5 +164,29 @@ class EventFormWidget extends StatelessWidget {
   String formatDateInfo(int value) {
     if (value < 10) return '0$value';
     return '$value';
+  }
+
+  void _confirmRemoveResponse() {
+    asuka.showDialog(
+      builder: (dialogContext) => AlertDialog(
+        title: Text('Remover resposta'),
+        content: Text('Atenção: Deletar este evento?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+            },
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              this.onDelete();
+              Navigator.pop(dialogContext);
+            },
+            child: Text('Confirmar'),
+          ),
+        ],
+      ),
+    );
   }
 }

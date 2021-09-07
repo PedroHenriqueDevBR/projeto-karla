@@ -43,15 +43,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void didChangeDependencies() {
     super.didChangeDependencies();
     _disposer = reaction(
-      (_) => _store.events.length,
+      (_) => _store.events,
       (_) => setState(() {}),
     );
-  }
-
-  @override
-  void dispose() {
-    _disposer();
-    super.dispose();
   }
 
   @override
