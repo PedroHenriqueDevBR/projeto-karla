@@ -4,17 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:projeto_karla/src/pages/show_event/show_event_style.dart';
 import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
 import 'package:projeto_karla/src/shared/models/event_model.dart';
+import 'package:projeto_karla/src/shared/models/response_model.dart';
 
 class BottomNavigationWidget extends StatelessWidget {
+  final TextEditingController txtResponse;
   final textTheme = AppTextTheme();
   final style = ShowEventStyle();
   EventModel eventModel;
   VoidCallback editOption;
+  Function onConfirmResponse;
+  Function onDeleteResponse;
 
   BottomNavigationWidget({
     Key? key,
+    required this.txtResponse,
     required this.eventModel,
     required this.editOption,
+    required this.onConfirmResponse,
+    required this.onDeleteResponse,
   }) : super(key: key);
 
   @override
@@ -50,44 +57,59 @@ class BottomNavigationWidget extends StatelessWidget {
 
   void showResponses(BuildContext context) {
     asuka.showBottomSheet(
-      (bottomSheetContext) => Container(
-        height: MediaQuery.of(bottomSheetContext).size.height - 220,
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              decoration: style.bottomSheetStyle.copyWith(color: Theme.of(context).cardColor),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Respostas',
-                    style: textTheme.titleStyle.copyWith(
-                      color: Theme.of(context).textTheme.bodyText1!.color,
+      (bottomSheetContext) => SafeArea(
+        top: true,
+        child: Container(
+          height: MediaQuery.of(bottomSheetContext).size.height - 35,
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                decoration: style.bottomSheetStyle.copyWith(color: Theme.of(context).cardColor),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Respostas',
+                      style: textTheme.titleStyle.copyWith(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(bottomSheetContext);
-                    },
-                    icon: Icon(Icons.close),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: eventModel.responses.length,
-                itemBuilder: (context, index) => ListTile(
-                  tileColor: index % 2 == 0 ? null : Colors.grey.withAlpha(50),
-                  title: Text(eventModel.responses[index].guestName),
-                  trailing: Text(eventModel.responses[index].confirm
-                      ? eventModel.confirmTextFormated
-                      : eventModel.cancelTextFormated),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(bottomSheetContext);
+                      },
+                      icon: Icon(Icons.close),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: ListView.builder(
+                  itemCount: eventModel.responses.length,
+                  itemBuilder: (context, index) {
+                    ResponseModel response = eventModel.responses[index];
+                    return ListTile(
+                      tileColor: index % 2 == 0 ? null : Colors.grey.withAlpha(50),
+                      title: Text(response.guestName),
+                      subtitle: Text(response.confirm ? eventModel.confirmTextFormated : eventModel.cancelTextFormated),
+                      leading: response.confirm ? Icon(Icons.check) : Icon(Icons.close),
+                      trailing: IconButton(
+                        onPressed: () {
+                          Navigator.pop(bottomSheetContext);
+                          confirmRemoveResponse(response);
+                        },
+                        icon: Icon(
+                          Icons.delete_outline,
+                          color: Colors.red,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -101,31 +123,45 @@ class BottomNavigationWidget extends StatelessWidget {
           child: Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Nome do convidado',
-                  hintText: 'Digite o nome do convidado',
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: TextFormField(
+                  controller: txtResponse,
+                  autovalidateMode: AutovalidateMode.always,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Campo obrigatório';
+                    if (value.length < 3) return 'Digite no mínimo 3 caracteres';
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Nome do convidado',
+                    hintText: 'Digite o nome do convidado',
+                  ),
                 ),
               ),
-              SizedBox(height: 80.0),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
-                      child: Text('Salvar'),
+                      onPressed: () {
+                        onConfirmResponse(false);
+                        Navigator.pop(dialogContext);
+                      },
+                      child: Text(eventModel.cancelTextFormated),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                      ),
                     ),
                   ),
-                ],
-              ),
-              Row(
-                children: [
+                  SizedBox(width: 8.0),
                   Expanded(
-                    child: TextButton(
-                      onPressed: () => Navigator.pop(dialogContext),
-                      child: Text(
-                        'Cancelar resposta',
-                        textAlign: TextAlign.center,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        onConfirmResponse(true);
+                        Navigator.pop(dialogContext);
+                      },
+                      child: Text(eventModel.confirmTextFormated),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.green,
                       ),
                     ),
                   ),
@@ -134,6 +170,30 @@ class BottomNavigationWidget extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void confirmRemoveResponse(ResponseModel response) {
+    asuka.showDialog(
+      builder: (dialogContext) => AlertDialog(
+        title: Text('Remover resposta'),
+        content: Text('Atenção: Deletar a resposta de ${response.guestName}?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+            },
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              onDeleteResponse(response);
+              Navigator.pop(dialogContext);
+            },
+            child: Text('Confirmar'),
+          ),
+        ],
       ),
     );
   }

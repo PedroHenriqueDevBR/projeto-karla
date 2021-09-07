@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'package:mobx/mobx.dart';
 import 'package:projeto_karla/src/pages/show_event/show_event_style.dart';
 import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
@@ -6,7 +7,9 @@ import 'package:projeto_karla/src/shared/exceptions/http_response_exception.dart
 import 'package:projeto_karla/src/shared/exceptions/invalid_data_exception.dart';
 import 'package:projeto_karla/src/shared/models/event_model.dart';
 import 'package:asuka/asuka.dart' as asuka;
+import 'package:projeto_karla/src/shared/models/response_model.dart';
 import 'package:projeto_karla/src/shared/repositories/event_repository.dart';
+import 'package:projeto_karla/src/shared/repositories/response_repository.dart';
 import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
 import 'package:share/share.dart';
 
@@ -17,16 +20,19 @@ class ShowEventStore extends _ShowEventStore with _$ShowEventStore {
     required BuildContext context,
     required EventRepository eventRepository,
     required UserRepository userRepository,
+    required ResponseRepository responseRepository,
   }) {
     super.context = context;
     super.userRepository = userRepository;
     super.eventRepository = eventRepository;
+    super.responseRepository = responseRepository;
   }
 }
 
 abstract class _ShowEventStore with Store {
   late BuildContext context;
   late EventRepository eventRepository;
+  late ResponseRepository responseRepository;
   late UserRepository userRepository;
   final textTheme = AppTextTheme();
   final style = ShowEventStyle();
@@ -38,6 +44,7 @@ abstract class _ShowEventStore with Store {
   TextEditingController txtCancelText = TextEditingController();
   TextEditingController txtImageUrl = TextEditingController();
   TextEditingController txtPassword = TextEditingController(text: '1234');
+  TextEditingController txtResponse = TextEditingController();
 
   @observable
   bool editing = false;
@@ -78,7 +85,6 @@ abstract class _ShowEventStore with Store {
       this.txtCancelText.text = eventArg.cancelTextFormated;
       this.imageUrl = eventArg.background ?? '';
       this.changeCurrentEvent(eventArg);
-      event.responses.addAll(eventArg.responses);
       return;
     }
     this.toggleEdit();
@@ -175,6 +181,67 @@ abstract class _ShowEventStore with Store {
     } finally {
       setLoading(false);
     }
+  }
+
+  Future<void> addResponse(bool confirm) async {
+    if (event.id == null) {
+      asuka.showSnackBar(asuka.AsukaSnackbar.message('Não permitido\nmotivo: evento não salvo'));
+      return;
+    }
+    if (!_eventDataIsValid()) return;
+    setLoading(true);
+    ResponseModel responseModel = ResponseModel.toSave(guestName: txtResponse.text, confirm: confirm);
+    try {
+      ResponseModel response = await responseRepository.addResponse(responseModel, event);
+      this.event.responses.add(response);
+      this.txtResponse.clear();
+      asuka.showSnackBar(asuka.AsukaSnackbar.success('Resposta adicionada com sucesso'));
+    } on HttpResponseException catch (error) {
+      if (error.response.statusCode >= 500) {
+        asuka.showSnackBar(asuka.AsukaSnackbar.alert('Erro 503 - Servidor indisponível'));
+      } else if (error.response.statusCode == 401) {
+        asuka.showSnackBar(asuka.AsukaSnackbar.alert('Sua sessão foi encerrada, entre novamente'));
+        logout();
+      } else {
+        asuka.showSnackBar(asuka.AsukaSnackbar.alert('${error.response.statusCode} - Erro interno'));
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  Future<void> removeResponse(ResponseModel responseModel) async {
+    if (event.id == null) {
+      asuka.showSnackBar(asuka.AsukaSnackbar.message('Não permitido\nmotivo: evento não salvo'));
+      return;
+    }
+    if (!_eventDataIsValid()) return;
+    setLoading(true);
+    try {
+      await responseRepository.deleteResponseFromEvent(responseModel, event);
+      this.event.responses.remove(responseModel);
+      this.txtResponse.clear();
+      asuka.showSnackBar(asuka.AsukaSnackbar.success('Resposta removida com sucesso'));
+    } on HttpResponseException catch (error) {
+      if (error.response.statusCode >= 500) {
+        asuka.showSnackBar(asuka.AsukaSnackbar.alert('Erro 503 - Servidor indisponível'));
+      } else if (error.response.statusCode == 401) {
+        asuka.showSnackBar(asuka.AsukaSnackbar.alert('Sua sessão foi encerrada, entre novamente'));
+        logout();
+      } else {
+        asuka.showSnackBar(asuka.AsukaSnackbar.alert('${error.response.statusCode} - Erro interno'));
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  bool responseIsValidToSave() {
+    if (txtResponse.text.length < 3) {
+      asuka.showSnackBar(asuka.AsukaSnackbar.message('Digite pelo 3 caracteres no nome do convidado'));
+      return false;
+    }
+    return true;
   }
 
   void _setEventDataToUpdate() {

@@ -23,6 +23,13 @@ class ShowEventStyle {
           topLeft: Radius.circular(0),
           topRight: Radius.circular(0),
         ),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 5,
+            color: Colors.black,
+            spreadRadius: -2,
+          )
+        ],
       );
 
   BoxDecoration cardHeaderDecoration({required String image, bool isNetwork = false}) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:projeto_karla/src/pages/show_event/stores/show_event_store.dart';
 import 'package:projeto_karla/src/pages/show_event/widgets/bottom_button_widget.dart';
 import 'package:projeto_karla/src/pages/show_event/widgets/bottom_navigation_widget.dart';
@@ -8,9 +9,11 @@ import 'package:projeto_karla/src/pages/show_event/widgets/event_form_widget.dar
 import 'package:projeto_karla/src/pages/show_event/widgets/header_widget.dart';
 import 'package:projeto_karla/src/shared/models/event_model.dart';
 import 'package:projeto_karla/src/shared/repositories/event_repository.dart';
+import 'package:projeto_karla/src/shared/repositories/response_repository.dart';
 import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
 import 'package:projeto_karla/src/shared/services/app_preferences_service.dart';
 import 'package:projeto_karla/src/shared/services/http_client_service.dart';
+import 'package:asuka/asuka.dart' as asuka;
 
 class ShowEventPage extends StatefulWidget {
   EventModel? eventModel;
@@ -22,6 +25,7 @@ class ShowEventPage extends StatefulWidget {
 class _ShowEventPageState extends State<ShowEventPage> {
   late ShowEventStore _store;
   final formKey = GlobalKey<FormState>();
+  late ReactionDisposer _disposer;
 
   @override
   void initState() {
@@ -35,9 +39,22 @@ class _ShowEventPageState extends State<ShowEventPage> {
         client: HttpClientService(),
         appData: AppPreferenceService(),
       ),
+      responseRepository: ResponseRepository(
+        client: HttpClientService(),
+        appData: AppPreferenceService(),
+      ),
     );
     _store.initEvent(widget.eventModel);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _disposer = reaction(
+      (_) => _store.event,
+      (_) => setState(() {}),
+    );
   }
 
   @override
@@ -117,8 +134,11 @@ class _ShowEventPageState extends State<ShowEventPage> {
                 }
               })
             : BottomNavigationWidget(
+                txtResponse: _store.txtResponse,
                 eventModel: _store.event,
                 editOption: _store.toggleEdit,
+                onConfirmResponse: _store.addResponse,
+                onDeleteResponse: _store.removeResponse,
               ),
       ),
     );
