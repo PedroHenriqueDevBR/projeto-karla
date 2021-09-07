@@ -10,9 +10,9 @@ class HttpClientService implements IClientHTTP {
 
   Map<String, String> _setAuthorization({String? key}) {
     Map<String, String> map = {};
+    map['Content-Type'] = 'application/json';
     if (key != null) {
       map['Authorization'] = 'Bearer $key';
-      map['Content-Type'] = 'application/json';
     }
     return map;
   }
