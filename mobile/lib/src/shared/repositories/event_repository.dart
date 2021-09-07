@@ -53,7 +53,8 @@ class EventRepository {
     try {
       final response = await _client.get(url, jwtKey: jwt);
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        return EventModel.fromResponseList(response.data);
+        final events = EventModel.fromResponseList(response.data);
+        return events;
       }
       throw HttpResponseException(response: response);
     } on SocketException catch (error) {

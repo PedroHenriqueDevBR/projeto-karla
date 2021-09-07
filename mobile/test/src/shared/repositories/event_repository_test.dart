@@ -44,7 +44,7 @@ main() {
     when(() => _appData.getJWT()).thenAnswer((_) async => 'jwtkey');
     final response = await _repository.getAllEvents();
     expect(response.isNotEmpty, true);
-    expect(response.length, equals(5));
+    expect(response.length, equals(2));
   });
 
   test('Should run a update data', () async {
@@ -104,64 +104,33 @@ Map updateEventResponse = {
 
 List<Map> eventListResponse = [
   {
-    "id": 2,
-    "title": "Evento 03",
-    "description": "Sem descrição",
+    "id": 11,
+    "title": "Evento",
+    "description": "a descrição do evento",
     "avatar": null,
     "background":
-        "https://images.pexels.com/photos/7078700/pexels-photo-7078700.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    "confirm_text": "Sim",
-    "cancel_text": "Não",
-    "expiration_date": "2021-08-27T19:04:33.143071",
-    "password": "",
-    "person": 1
+        "https://images.pexels.com/photos/5065790/pexels-photo-5065790.jpeg?cs=srgb&dl=pexels-kamaji-ogino-5065790.jpg&fm=jpg",
+    "confirm_text": "Estou nessa",
+    "cancel_text": "Nem fedendo",
+    "expiration_date": "2021-09-11T00:00:00.000",
+    "password": "1234",
+    "person": 1,
+    "responses": [
+      {"id": 13, "response_date": "2021-09-07T09:56:41.015954-03:00", "guest_name": "Kakaroto", "confirm": true}
+    ]
   },
   {
-    "id": 3,
-    "title": "Teste",
-    "description": "teste",
+    "id": 12,
+    "title": "Aniversário da Karla",
+    "description": "Descrição do aniversário da karla",
     "avatar": null,
-    "background": null,
-    "confirm_text": null,
-    "cancel_text": null,
-    "expiration_date": "2021-08-21",
-    "password": "",
-    "person": 1
-  },
-  {
-    "id": 5,
-    "title": "Evento com nulo",
-    "description": "Sem descrição",
-    "avatar": null,
-    "background": null,
-    "confirm_text": null,
-    "cancel_text": null,
-    "expiration_date": "2021-08-27T19:04:33.143071",
-    "password": "",
-    "person": 1
-  },
-  {
-    "id": 6,
-    "title": "Updated again",
-    "description": "text",
-    "avatar": null,
-    "background": null,
-    "confirm_text": "Posso ir",
-    "cancel_text": null,
-    "expiration_date": "2021-08-26T00:00:00.000",
-    "password": "",
-    "person": 1
-  },
-  {
-    "id": 8,
-    "title": "Titulo",
-    "description": "",
-    "avatar": null,
-    "background": null,
-    "confirm_text": null,
-    "cancel_text": null,
-    "expiration_date": "2021-08-25T00:00:00.000",
-    "password": "",
-    "person": 1
+    "background":
+        "https://images.pexels.com/photos/1629781/pexels-photo-1629781.jpeg?cs=srgb&dl=pexels-ilargian-faus-1629781.jpg&fm=jpg",
+    "confirm_text": "Estou nessa",
+    "cancel_text": "Não posso",
+    "expiration_date": "2021-09-11T00:00:00.000",
+    "password": "1234",
+    "person": 1,
+    "responses": []
   }
 ];

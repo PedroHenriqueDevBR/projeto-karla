@@ -54,7 +54,9 @@ class EventModel {
   static List<EventModel> fromResponseList(List<dynamic> list) {
     List<EventModel> events = [];
     for (dynamic item in list) {
-      events.add(EventModel.fromRestAPI(item));
+      final event = EventModel.fromRestAPI(item);
+      event.responses = ResponseModel.fromResponseList(item['responses']);
+      events.add(event);
     }
     return events;
   }
