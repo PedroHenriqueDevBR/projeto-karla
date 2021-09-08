@@ -1,52 +1,72 @@
-# Projeto da Carla
-Projeto criado para a senhorita Carla.
+<h1 align="center">:woman: Karla App</h1>
+
+<p align="center">
+Projeto desenvolvido para a minha amiga Karla, para solucionar um problema em que ela se encontra em relação à confimação do recebimento de convites e confirmação de presença em eventos.
+</p>
+
+<p align="center">
+<img alt="Developer" src="https://img.shields.io/badge/Developer-PedroHenriqueDevBR-green">
+<img alt="GitHub top language" src="https://img.shields.io/github/languages/top/pedrohenriquedevbr/projeto-karla">
+<img alt="Front-emd" src="https://img.shields.io/badge/Frontend-Flutter-blue">
+<img alt="Back-end" src="https://img.shields.io/badge/Backend-Django-green">
+</p>
+
+# :memo: Visão Geral
+
+Gerenciador de convites de eventos.
 
 
-## Contexto
+ * <strong><a href="#tecnologias">Tecnologias utilizadas</a></strong>
+ * <strong><a href="#modelagem">Modelagem da aplicação</a></strong>
+    * <strong><a href="#modelagem-classes">Modelagem das classes</a></strong>
+ * <strong><a href="#requisitos">Pré-requisitos</a></strong>
+ * <strong><a href="#instalacao">Instalação</a></strong>
+ * <strong><a href="#funcionalidades">Funcionalidades</a></strong>
+ * <strong><a href="#screenshots">Screenshots</a></strong>
 
-Haverá um evento, nesse evento é preciso saber a quantidade exata de pessoas que irão comparecer, pois a quantidade de pessoas define o total do custo do evento, portando, se uma pessoa convidada informar (presencialmente) que irá para o evento e não comparecer, então o organizador do evento irá pagar pela conta da pessoa que faltou.
+<h1 id="tecnologias">:rocket: Tecnologias utilizadas</h1>
 
-## Objetivo
+<br>
 
-Desenvolver uma aplicação para que pessoas convidadas por meio de link (enviado por app de menssagens instantâneas) possam informar de forma calma se irão ou não comparecer ao evento, com o objetivo de ter um controle de quantidade de convidados e do total da conta.
+* <img alt="Dart" src="https://img.shields.io/badge/-Dart-blue"> - Linguagem de programação utilizada no desenvolvimento Front-end.
+* <img alt="Flutter" src="https://img.shields.io/badge/-Flutter-blue"> - Framework utilizado no desenvolvimento da aplicação mobile.
+* <img alt="Python" src="https://img.shields.io/badge/-Python-green"> - Linguagem de programação utilizada no desenvolvimento Back-end.
+* <img alt="Django" src="https://img.shields.io/badge/-Django-green"> - Framework utilizado no desenvolvimento da REST API.
+* <img alt="DRF" src="https://img.shields.io/badge/-DRF-red"> - Toolkit utilizado junto do Django para facilitar a criação da REST API.
 
+<h1 id="modelagem">:bulb: Modelagem da aplicação</h1>
 
-## Solução
+Esta seção irá mostrar como a aplicação foi modelada para que pudesse atender todas as necessidades propostas da descrição do desafio.
 
-1. Criar uma plataforma Web (Python+Django) para disponibilizar um questionário para o público convidado.
-2. Ao acessar o link enviado, o convidado deve informar uma senha (fornecida pelo organizador), para que possa acessar o questionário. 
-3. O convidado deve informar o nome completo e escolher entre as opções (Confirmar Presença ou negar presença).
-4. O Organizador pode acessar uma página e verificar o total de pessoas que confirmaram a presença no evento.
+A modelagem foi criada antes de iniciar o desenvolvimento da aplicação, com o objetivo de guiar o desenvolvimento e evitar erros que pudessem atrapalhar o andamento do desenvolvimento.
 
+<h2 id="modelagem-classes">Modelagem do banco de dados</h2>
 
-## Modelagem básica
+<img width="100%" src="" />
 
-**Usuário**
-- Nome
-- username
-- senha
-- email
+<h1 id="requisitos">:warning: Pré-requisitos</h1>
 
-**Evento**
-- Titulo
-- Descrição
-- Avatar do organizador
-- background
-- confirmar texto
-- cancelar texto
-- Data de expiração
+O desenvolvimento dessa aplicação utiliza como base as seguintes tecnologias e versões apresentadas abaixo. Caso ocorra algum erro na execução da aplicação ou mesmo nos comandos de configurações, verifique se a versão do Dart e do Flutter no seu computador estão devidamente atualizados.
 
-**Respostas**
-- data da resposta
-- nome convidado
-- Irá comparecer
+1. Dart 2.12.0 ou superior
+2. Flutter 2.2.0 ou superior
+3. Python 3.6 ou superior
+4. Django 3.2.6 ou superior
+5. git version 2.17.1
 
-## To Do
+<h1 id="instalacao">:information_source: Instalação</h1>
 
-- [X] Criar o projeto Django
-- [X] Criar a aplicação Core
-- [ ] Implementar os models
-- [ ] Criar a view de login e cadastro de usuário
-- [ ] Criar a view de dashboard (apresentar meus eventos ou cadastrar um novo)
-- [ ] Criar a view de apresentação do evento (Se for dono do evento então ele pode ser editado)
-- [ ] Criar a view de apresentação do resultado
+```bash
+```
+
+<h2 id="funcionalidades">:heavy_check_mark: Funcionalidades</h2>
+
+- [X] Registrar usuário
+- [X] Realizar o login do usuário
+- [X] Adicionar evento
+- [X] Selecionar todos os eventos do usuário logado
+- [X] Modificar evento do usuário logado (Atualizar, deletar)
+- [X] Compartilhar o link de um evento
+- [X] Adicionar a resposta do convidado
+
+<h1 id="screenshots">Screenshots</h1>
