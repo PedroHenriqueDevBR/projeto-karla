@@ -15,10 +15,11 @@ Projeto desenvolvido para a minha amiga Karla, para solucionar um problema em qu
 
 Gerenciador de convites de eventos.
 
-
  * <strong><a href="#tecnologias">Tecnologias utilizadas</a></strong>
  * <strong><a href="#modelagem">Modelagem da aplicação</a></strong>
-    * <strong><a href="#modelagem-classes">Modelagem das classes</a></strong>
+    * <strong><a href="#modelagem-classes">Modelagem do banco de dados (Back-end)</a></strong>
+    * <strong><a href="#modelagem-mobile">Modelagem das classes da aplicação (Mobile)</a></strong>
+    * <strong><a href="#prototype">Protótipo da aplicação (Mobile)</a></strong>
  * <strong><a href="#requisitos">Pré-requisitos</a></strong>
  * <strong><a href="#instalacao">Instalação</a></strong>
  * <strong><a href="#funcionalidades">Funcionalidades</a></strong>
@@ -42,7 +43,21 @@ A modelagem foi criada antes de iniciar o desenvolvimento da aplicação, com o 
 
 <h2 id="modelagem-classes">Modelagem do banco de dados</h2>
 
-<img width="100%" src="" />
+<img width="100%" src="https://raw.githubusercontent.com/PedroHenriqueDevBR/projeto-karla/76140ffb7ed5c957989540ecad37d05e4777e923/docs/models/karla-backend.svg?token=AIYECYVAULF7W4VJORVHQGLBHAG44" />
+
+<h2 id="modelagem-mobile">Modelagem das classes da aplicação</h2>
+
+A modelagem das classes da aplicação servem para que a aplicação possa utilizar os dados fornecidos pela RestAPI.
+
+<img width="100%" src="https://raw.githubusercontent.com/PedroHenriqueDevBR/projeto-karla/76140ffb7ed5c957989540ecad37d05e4777e923/docs/models/karla-mobile.svg?token=AIYECYRS2HK3ZU7X4NE4MI3BHAG74" />
+
+<h2 id="prototype">Protótipo de alta fidelidade</h2>
+
+Criei o protóripo de alta fidelidade para facilitar a codificação quando eu estivesse criando as interfaces da aplicação, o objetivo principal desse protóripo foi servir de guia para a implementação da camada presenter.
+
+<img width="100%" src="https://raw.githubusercontent.com/PedroHenriqueDevBR/projeto-karla/76140ffb7ed5c957989540ecad37d05e4777e923/docs/prototype/figma-mobile.svg?token=AIYECYWQFWVVZS3DHPZBYETBHAING" />
+
+
 
 <h1 id="requisitos">:warning: Pré-requisitos</h1>
 
@@ -57,6 +72,30 @@ O desenvolvimento dessa aplicação utiliza como base as seguintes tecnologias e
 <h1 id="instalacao">:information_source: Instalação</h1>
 
 ```bash
+# Baixe o projeto no seu computador
+git clone https://github.com/PedroHenriqueDevBR/projeto-karla.git
+cd projeto-karla/
+
+# Crie uma máquina virtual para o back-end
+cd projeto_da_carla/
+virtualenv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+
+# Rode o servidor localmente
+python manage.py migrate
+python manage.py runserver 0.0.0.0:8000
+
+# Rode os testes para garantir que não há código quebrado
+cd ../mobile/
+flutter test
+
+# Rode a aplicação no seu dispositivo android ou no Linux
+flutte run
+ou
+flutte run -d linux
+
 ```
 
 <h2 id="funcionalidades">:heavy_check_mark: Funcionalidades</h2>
@@ -69,4 +108,36 @@ O desenvolvimento dessa aplicação utiliza como base as seguintes tecnologias e
 - [X] Compartilhar o link de um evento
 - [X] Adicionar a resposta do convidado
 
-<h1 id="screenshots">Screenshots</h1>
+<h1 id="screenshots">Screenshots (Resultado final)</h1>
+
+<div>
+   <h2>Login e cadastro de usuário</h2>
+   <img width="25%" src="https://github.com/PedroHenriqueDevBR/projeto-karla/blob/main/docs/screenshots/mobile/login.png" />
+   <img width="25%" src="https://github.com/PedroHenriqueDevBR/projeto-karla/blob/main/docs/screenshots/mobile/login-2.png" />
+   <img width="25%" src="https://github.com/PedroHenriqueDevBR/projeto-karla/blob/main/docs/screenshots/mobile/register-user.png" />
+</div>
+
+<div>
+   <h2>Home</h2>
+   <img width="25%" src="https://github.com/PedroHenriqueDevBR/projeto-karla/blob/main/docs/screenshots/mobile/home-1.png" />
+   <img width="25%" src="https://github.com/PedroHenriqueDevBR/projeto-karla/blob/main/docs/screenshots/mobile/home-2.png" />
+</div>
+
+<div>
+   <h2>Página do evento</h2>
+   
+   <h4>Registro e edição</h4>
+   <img width="22%" src="https://github.com/PedroHenriqueDevBR/projeto-karla/blob/main/docs/screenshots/mobile/event-1.png" />
+   <img width="22%" src="https://github.com/PedroHenriqueDevBR/projeto-karla/blob/main/docs/screenshots/mobile/event-2.png" />
+   <img width="22%" src="https://github.com/PedroHenriqueDevBR/projeto-karla/blob/main/docs/screenshots/mobile/event-3.png" />
+   
+   <h4>Alteração da capa do evento</h4>
+   <img width="22%" src="https://github.com/PedroHenriqueDevBR/projeto-karla/blob/main/docs/screenshots/mobile/event-4.png" />
+   <img width="22%" src="https://github.com/PedroHenriqueDevBR/projeto-karla/blob/main/docs/screenshots/mobile/event-5.png" />
+   
+   <h4>Apresentação e inclusão de respostas</h4>
+   <img width="22%" src="https://github.com/PedroHenriqueDevBR/projeto-karla/blob/main/docs/screenshots/mobile/event-6.png" />
+   <img width="22%" src="https://github.com/PedroHenriqueDevBR/projeto-karla/blob/main/docs/screenshots/mobile/event-7.png" />
+   <img width="22%" src="https://github.com/PedroHenriqueDevBR/projeto-karla/blob/main/docs/screenshots/mobile/event-8.png" />
+</div>
+
