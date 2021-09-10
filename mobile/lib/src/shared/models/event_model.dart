@@ -1,4 +1,4 @@
-import 'package:projeto_karla/src/shared/models/response_model.dart';
+import 'response_model.dart';
 
 class EventModel {
   int? id;

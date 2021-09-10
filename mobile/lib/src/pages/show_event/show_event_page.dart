@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:projeto_karla/src/pages/show_event/stores/show_event_store.dart';
-import 'package:projeto_karla/src/pages/show_event/widgets/bottom_button_widget.dart';
-import 'package:projeto_karla/src/pages/show_event/widgets/bottom_navigation_widget.dart';
-import 'package:projeto_karla/src/pages/show_event/widgets/event_content_widget.dart';
-import 'package:projeto_karla/src/pages/show_event/widgets/event_form_widget.dart';
-import 'package:projeto_karla/src/pages/show_event/widgets/header_widget.dart';
-import 'package:projeto_karla/src/shared/models/event_model.dart';
-import 'package:projeto_karla/src/shared/repositories/event_repository.dart';
-import 'package:projeto_karla/src/shared/repositories/response_repository.dart';
-import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
-import 'package:projeto_karla/src/shared/services/app_preferences_service.dart';
-import 'package:projeto_karla/src/shared/services/http_client_service.dart';
-import 'package:asuka/asuka.dart' as asuka;
+import 'stores/show_event_store.dart';
+import 'widgets/bottom_button_widget.dart';
+import 'widgets/bottom_navigation_widget.dart';
+import 'widgets/event_content_widget.dart';
+import 'widgets/event_form_widget.dart';
+import 'widgets/header_widget.dart';
+import '../../shared/models/event_model.dart';
+import '../../shared/repositories/event_repository.dart';
+import '../../shared/repositories/response_repository.dart';
+import '../../shared/repositories/user_repository.dart';
+import '../../shared/services/app_preferences_service.dart';
+import '../../shared/services/http_client_service.dart';
 
 class ShowEventPage extends StatefulWidget {
   EventModel? eventModel;

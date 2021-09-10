@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_karla/src/shared/core/assets.dart';
+import '../../shared/core/assets.dart';
 
 class RegisterUserStyle {
   AppAssets _appAssets = AppAssets();

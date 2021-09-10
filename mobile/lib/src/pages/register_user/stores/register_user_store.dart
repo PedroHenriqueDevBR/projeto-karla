@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:projeto_karla/src/shared/exceptions/http_response_exception.dart';
-import 'package:projeto_karla/src/shared/exceptions/invalid_data_exception.dart';
-import 'package:projeto_karla/src/shared/models/user_model.dart';
-import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
 import 'package:asuka/asuka.dart' as asuka;
+import '../../../shared/exceptions/http_response_exception.dart';
+import '../../../shared/exceptions/invalid_data_exception.dart';
+import '../../../shared/models/user_model.dart';
+import '../../../shared/repositories/user_repository.dart';
 
 part 'register_user_store.g.dart';
 

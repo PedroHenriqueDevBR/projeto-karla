@@ -1,11 +1,11 @@
+import 'package:asuka/asuka.dart' as asuka;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:projeto_karla/src/pages/home/home_page.dart';
-import 'package:projeto_karla/src/pages/login/login_page.dart';
-import 'package:projeto_karla/src/pages/register_user/register_user_page.dart';
-import 'package:projeto_karla/src/pages/show_event/show_event_page.dart';
-import 'package:projeto_karla/src/shared/core/app_themes.dart';
-import 'package:asuka/asuka.dart' as asuka;
+import 'app_themes.dart';
+import '../../pages/home/home_page.dart';
+import '../../pages/login/login_page.dart';
+import '../../pages/register_user/register_user_page.dart';
+import '../../pages/show_event/show_event_page.dart';
 
 class App extends StatelessWidget {
   final _appThemes = AppThemes();

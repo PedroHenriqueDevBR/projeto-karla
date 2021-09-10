@@ -1,11 +1,9 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-
-import 'package:projeto_karla/src/pages/home/home_style.dart';
-import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
-import 'package:projeto_karla/src/shared/core/assets.dart';
-import 'package:projeto_karla/src/shared/models/event_model.dart';
+import '../home_style.dart';
+import '../../../shared/core/app_text_theme.dart';
+import '../../../shared/core/assets.dart';
+import '../../../shared/models/event_model.dart';
 
 class EventCardWidget extends StatelessWidget {
   VoidCallback onClick;

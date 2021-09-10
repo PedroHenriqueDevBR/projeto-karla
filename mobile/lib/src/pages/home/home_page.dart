@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:projeto_karla/src/pages/home/home_style.dart';
-import 'package:projeto_karla/src/pages/home/stores/home_store.dart';
-import 'package:projeto_karla/src/pages/home/widgets/event_card_widget.dart';
-import 'package:projeto_karla/src/shared/core/assets.dart';
-import 'package:projeto_karla/src/shared/models/event_model.dart';
-import 'package:projeto_karla/src/shared/repositories/event_repository.dart';
-import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
-import 'package:projeto_karla/src/shared/services/app_preferences_service.dart';
-import 'package:projeto_karla/src/shared/services/http_client_service.dart';
+import 'home_style.dart';
+import 'stores/home_store.dart';
+import 'widgets/event_card_widget.dart';
+import '../../shared/core/assets.dart';
+import '../../shared/models/event_model.dart';
+import '../../shared/repositories/event_repository.dart';
+import '../../shared/repositories/user_repository.dart';
+import '../../shared/services/app_preferences_service.dart';
+import '../../shared/services/http_client_service.dart';
 
 class HomePage extends StatefulWidget {
   @override

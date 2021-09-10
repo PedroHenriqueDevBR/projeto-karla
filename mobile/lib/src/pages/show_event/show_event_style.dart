@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_karla/src/shared/core/app_themes.dart';
+import '../../shared/core/app_themes.dart';
 
 class ShowEventStyle {
   final _appThemes = AppThemes();

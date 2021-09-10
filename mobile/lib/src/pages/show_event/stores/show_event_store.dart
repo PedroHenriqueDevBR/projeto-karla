@@ -1,17 +1,16 @@
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart';
 import 'package:mobx/mobx.dart';
-import 'package:projeto_karla/src/pages/show_event/show_event_style.dart';
-import 'package:projeto_karla/src/shared/core/app_text_theme.dart';
-import 'package:projeto_karla/src/shared/exceptions/http_response_exception.dart';
-import 'package:projeto_karla/src/shared/exceptions/invalid_data_exception.dart';
-import 'package:projeto_karla/src/shared/models/event_model.dart';
-import 'package:asuka/asuka.dart' as asuka;
-import 'package:projeto_karla/src/shared/models/response_model.dart';
-import 'package:projeto_karla/src/shared/repositories/event_repository.dart';
-import 'package:projeto_karla/src/shared/repositories/response_repository.dart';
-import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
 import 'package:share/share.dart';
+import 'package:asuka/asuka.dart' as asuka;
+import '../show_event_style.dart';
+import '../../../shared/core/app_text_theme.dart';
+import '../../../shared/exceptions/http_response_exception.dart';
+import '../../../shared/exceptions/invalid_data_exception.dart';
+import '../../../shared/models/event_model.dart';
+import '../../../shared/models/response_model.dart';
+import '../../../shared/repositories/event_repository.dart';
+import '../../../shared/repositories/response_repository.dart';
+import '../../../shared/repositories/user_repository.dart';
 
 part 'show_event_store.g.dart';
 

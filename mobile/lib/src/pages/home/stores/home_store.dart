@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:projeto_karla/src/pages/show_event/show_event_page.dart';
-import 'package:projeto_karla/src/shared/exceptions/http_response_exception.dart';
-import 'package:projeto_karla/src/shared/models/event_model.dart';
-import 'package:projeto_karla/src/shared/repositories/event_repository.dart';
 import 'package:asuka/asuka.dart' as asuka;
-import 'package:projeto_karla/src/shared/repositories/user_repository.dart';
+import '../../show_event/show_event_page.dart';
+import '../../../shared/exceptions/http_response_exception.dart';
+import '../../../shared/models/event_model.dart';
+import '../../../shared/repositories/event_repository.dart';
+import '../../../shared/repositories/user_repository.dart';
 
 part 'home_store.g.dart';
 

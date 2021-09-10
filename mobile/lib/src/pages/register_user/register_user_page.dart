@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:projeto_karla/src/pages/register_user/register_user_style.dart';
+import 'register_user_style.dart';
 import 'stores/register_user_store.dart';
 import '../../shared/core/app_text_theme.dart';
 import '../../shared/repositories/user_repository.dart';

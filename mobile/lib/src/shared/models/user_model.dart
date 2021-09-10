@@ -1,4 +1,4 @@
-import 'package:projeto_karla/src/shared/models/event_model.dart';
+import 'event_model.dart';
 
 class UserModel {
   dynamic id;
