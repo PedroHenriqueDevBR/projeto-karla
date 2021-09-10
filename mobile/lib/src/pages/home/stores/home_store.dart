@@ -1,30 +1,31 @@
+import 'package:asuka/asuka.dart' as asuka;
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:asuka/asuka.dart' as asuka;
-import '../../show_event/show_event_page.dart';
+
 import '../../../shared/exceptions/http_response_exception.dart';
+import '../../../shared/interfaces/event_store_interface.dart';
+import '../../../shared/interfaces/user_store_interface.dart';
 import '../../../shared/models/event_model.dart';
-import '../../../shared/repositories/event_repository.dart';
-import '../../../shared/repositories/user_repository.dart';
+import '../../show_event/show_event_page.dart';
 
 part 'home_store.g.dart';
 
 class HomeStore extends _HomeStore with _$HomeStore {
   HomeStore({
-    required UserRepository userRepository,
-    required EventRepository repository,
+    required IUserStorage userStorage,
+    required IEventStorage eventStorage,
     required BuildContext context,
   }) {
-    super.userRepository = userRepository;
-    super.eventRepository = repository;
+    super.userRepository = userStorage;
+    super.eventRepository = eventStorage;
     super.context = context;
   }
 }
 
 abstract class _HomeStore with Store {
   ObservableList<EventModel> events = ObservableList<EventModel>();
-  late EventRepository eventRepository;
-  late UserRepository userRepository;
+  late IEventStorage eventRepository;
+  late IUserStorage userRepository;
   late BuildContext context;
 
   @observable

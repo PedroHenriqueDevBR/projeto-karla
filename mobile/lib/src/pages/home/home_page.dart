@@ -27,11 +27,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     super.initState();
     _store = HomeStore(
       context: context,
-      userRepository: UserRepository(
+      userStorage: UserRepository(
         client: HttpClientService(),
         appData: AppPreferenceService(),
       ),
-      repository: EventRepository(
+      eventStorage: EventRepository(
         client: HttpClientService(),
         appData: AppPreferenceService(),
       ),

@@ -1,21 +1,22 @@
+import 'package:asuka/asuka.dart' as asuka;
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:asuka/asuka.dart' as asuka;
+
 import '../../../shared/exceptions/http_response_exception.dart';
 import '../../../shared/exceptions/invalid_data_exception.dart';
+import '../../../shared/interfaces/user_store_interface.dart';
 import '../../../shared/models/user_model.dart';
-import '../../../shared/repositories/user_repository.dart';
 
 part 'register_user_store.g.dart';
 
 class RegisterUserStore extends _RegisterUserStore with _$RegisterUserStore {
-  RegisterUserStore({required UserRepository repository}) {
+  RegisterUserStore({required IUserStorage repository}) {
     super.repository = repository;
   }
 }
 
 abstract class _RegisterUserStore with Store {
-  late UserRepository repository;
+  late IUserStorage repository;
 
   @observable
   String txtName = '';

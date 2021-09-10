@@ -1,25 +1,26 @@
+import 'package:asuka/asuka.dart' as asuka;
 import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:share/share.dart';
-import 'package:asuka/asuka.dart' as asuka;
-import '../show_event_style.dart';
+
 import '../../../shared/core/app_text_theme.dart';
 import '../../../shared/exceptions/http_response_exception.dart';
 import '../../../shared/exceptions/invalid_data_exception.dart';
+import '../../../shared/interfaces/event_store_interface.dart';
+import '../../../shared/interfaces/response_store_interface.dart';
+import '../../../shared/interfaces/user_store_interface.dart';
 import '../../../shared/models/event_model.dart';
 import '../../../shared/models/response_model.dart';
-import '../../../shared/repositories/event_repository.dart';
-import '../../../shared/repositories/response_repository.dart';
-import '../../../shared/repositories/user_repository.dart';
+import '../show_event_style.dart';
 
 part 'show_event_store.g.dart';
 
 class ShowEventStore extends _ShowEventStore with _$ShowEventStore {
   ShowEventStore({
     required BuildContext context,
-    required EventRepository eventRepository,
-    required UserRepository userRepository,
-    required ResponseRepository responseRepository,
+    required IEventStorage eventRepository,
+    required IUserStorage userRepository,
+    required IResponseStorage responseRepository,
   }) {
     super.context = context;
     super.userRepository = userRepository;
@@ -30,9 +31,9 @@ class ShowEventStore extends _ShowEventStore with _$ShowEventStore {
 
 abstract class _ShowEventStore with Store {
   late BuildContext context;
-  late EventRepository eventRepository;
-  late ResponseRepository responseRepository;
-  late UserRepository userRepository;
+  late IEventStorage eventRepository;
+  late IResponseStorage responseRepository;
+  late IUserStorage userRepository;
   final textTheme = AppTextTheme();
   final style = ShowEventStyle();
   // ===

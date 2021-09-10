@@ -1,21 +1,22 @@
-import 'package:mobx/mobx.dart';
 import 'package:asuka/asuka.dart' as asuka;
 import 'package:flutter/material.dart';
+import 'package:mobx/mobx.dart';
+
 import '../../../shared/exceptions/http_response_exception.dart';
 import '../../../shared/exceptions/invalid_data_exception.dart';
+import '../../../shared/interfaces/user_store_interface.dart';
 import '../../../shared/models/user_model.dart';
-import '../../../shared/repositories/user_repository.dart';
 
 part 'login_store.g.dart';
 
 class LoginStore extends _LoginStore with _$LoginStore {
-  LoginStore({required UserRepository repository}) {
+  LoginStore({required IUserStorage repository}) {
     super.repository = repository;
   }
 }
 
 abstract class _LoginStore with Store {
-  late UserRepository repository;
+  late IUserStorage repository;
 
   @observable
   String txtLogin = '';

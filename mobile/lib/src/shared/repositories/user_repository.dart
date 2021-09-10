@@ -1,4 +1,5 @@
 import 'dart:io';
+import '../interfaces/user_store_interface.dart';
 import '../interfaces/app_data_interface.dart';
 import '../interfaces/client_http_interface.dart';
 import '../services/http_response_model.dart';
@@ -6,7 +7,7 @@ import '../exceptions/http_response_exception.dart';
 import '../exceptions/invalid_data_exception.dart';
 import '../models/user_model.dart';
 
-class UserRepository {
+class UserRepository implements IUserStorage {
   IClientHTTP _client;
   IAppData _appData;
 

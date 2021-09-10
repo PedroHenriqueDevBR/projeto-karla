@@ -1,3 +1,4 @@
+import '../interfaces/response_store_interface.dart';
 import '../interfaces/app_data_interface.dart';
 import '../interfaces/client_http_interface.dart';
 import '../exceptions/http_response_exception.dart';
@@ -5,7 +6,7 @@ import '../exceptions/invalid_data_exception.dart';
 import '../models/event_model.dart';
 import '../models/response_model.dart';
 
-class ResponseRepository {
+class ResponseRepository implements IResponseStorage {
   IClientHTTP _client;
   IAppData _appData;
 

@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:projeto_karla/src/shared/services/http_response_model.dart';
-
+import '../interfaces/event_store_interface.dart';
+import '../services/http_response_model.dart';
 import '../interfaces/app_data_interface.dart';
 import '../interfaces/client_http_interface.dart';
 import '../models/event_model.dart';
 import '../exceptions/http_response_exception.dart';
 import '../exceptions/invalid_data_exception.dart';
 
-class EventRepository {
+class EventRepository implements IEventStorage {
   IClientHTTP _client;
   IAppData _appData;
 
