@@ -6,7 +6,7 @@ Projeto desenvolvido para a minha amiga Karla, para solucionar um problema em qu
 
 <p align="center">
 <img alt="Developer" src="https://img.shields.io/badge/Developer-PedroHenriqueDevBR-green">
-<img alt="GitHub top language" src="https://img.shields.io/github/languages/top/pedrohenriquedevbr/projeto-karla">
+<img alt="GitHub top language" src="https://img.shields.io/github/languages/top/PedroHenriqueDevBR/projeto-karla">
 <img alt="Front-emd" src="https://img.shields.io/badge/Frontend-Flutter-blue">
 <img alt="Back-end" src="https://img.shields.io/badge/Backend-Django-green">
 </p>
